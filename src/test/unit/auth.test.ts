@@ -104,10 +104,7 @@ describe('TokenAuthProvider', () => {
       };
 
       https.request.mockImplementation(
-        (
-          _options: unknown,
-          callback: (res: { statusCode: number; resume: () => void }) => void,
-        ) => {
+        (_options: unknown, callback: (res: { statusCode: number; resume: () => void }) => void) => {
           // Call callback asynchronously
           setTimeout(() => callback(mockResponse), 0);
           return mockRequest;
@@ -134,10 +131,7 @@ describe('TokenAuthProvider', () => {
       };
 
       https.request.mockImplementation(
-        (
-          _options: unknown,
-          callback: (res: { statusCode: number; resume: () => void }) => void,
-        ) => {
+        (_options: unknown, callback: (res: { statusCode: number; resume: () => void }) => void) => {
           setTimeout(() => callback(mockResponse), 0);
           return mockRequest;
         },
@@ -163,10 +157,7 @@ describe('TokenAuthProvider', () => {
       };
 
       https.request.mockImplementation(
-        (
-          _options: unknown,
-          callback: (res: { statusCode: number; resume: () => void }) => void,
-        ) => {
+        (_options: unknown, callback: (res: { statusCode: number; resume: () => void }) => void) => {
           setTimeout(() => callback(mockResponse), 0);
           return mockRequest;
         },

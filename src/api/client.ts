@@ -387,12 +387,10 @@ export class F5XCClient {
   async listNamespaces(): Promise<Array<{ name: string; metadata: ResourceMetadata }>> {
     this.logger.debug('Listing namespaces');
 
-    const response = await this.request<ListResponse<{ name: string; metadata: ResourceMetadata }>>(
-      {
-        method: 'GET',
-        path: API_ENDPOINTS.NAMESPACES,
-      },
-    );
+    const response = await this.request<ListResponse<{ name: string; metadata: ResourceMetadata }>>({
+      method: 'GET',
+      path: API_ENDPOINTS.NAMESPACES,
+    });
 
     return response.items || [];
   }
@@ -459,13 +457,8 @@ export class F5XCClient {
    * @param items - List of API operations to check (method + path)
    * @returns Promise resolving to true if ALL operations are permitted
    */
-  async checkApiAccess(
-    namespace: string,
-    items: Array<{ method: string; path: string }>,
-  ): Promise<boolean> {
-    this.logger.debug(
-      `Checking API access for ${items.length} operations in namespace ${namespace}`,
-    );
+  async checkApiAccess(namespace: string, items: Array<{ method: string; path: string }>): Promise<boolean> {
+    this.logger.debug(`Checking API access for ${items.length} operations in namespace ${namespace}`);
 
     const request = {
       namespace,

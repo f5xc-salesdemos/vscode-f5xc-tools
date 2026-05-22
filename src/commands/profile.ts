@@ -75,8 +75,7 @@ export function registerProfileCommands(
             },
             {
               label: 'P12 Certificate Bundle',
-              description:
-                'Use a P12/PFX certificate file (password from F5XC_P12_PASSWORD env var)',
+              description: 'Use a P12/PFX certificate file (password from F5XC_P12_PASSWORD env var)',
               value: 'p12Bundle',
             },
             {
@@ -206,9 +205,7 @@ export function registerProfileCommands(
         if (validating) {
           showInfo(`Profile "${name}" added and validated successfully`);
         } else {
-          showWarning(
-            `Profile "${name}" added but credentials could not be validated. Check your settings.`,
-          );
+          showWarning(`Profile "${name}" added but credentials could not be validated. Check your settings.`);
         }
 
         profilesProvider.refresh();

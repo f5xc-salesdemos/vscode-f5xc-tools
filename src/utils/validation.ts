@@ -313,11 +313,7 @@ export function validateResourcePayload(
           message: `${formatFieldName(fieldPath)}: value ${value} exceeds maximum of ${constraint.maximum}`,
         });
       }
-      if (
-        constraint.multipleOf !== undefined &&
-        constraint.multipleOf !== 0 &&
-        value % constraint.multipleOf !== 0
-      ) {
+      if (constraint.multipleOf !== undefined && constraint.multipleOf !== 0 && value % constraint.multipleOf !== 0) {
         constraintViolations.push({
           fieldPath,
           value,
@@ -340,9 +336,7 @@ export function validateResourcePayload(
     for (const rawConflictPath of conflictPaths) {
       // conflictsWith values may be bare sibling names (e.g., "port_ranges")
       // or full paths (e.g., "spec.port_ranges"). Resolve relative to field's parent.
-      const parentPath = fieldPath.includes('.')
-        ? fieldPath.substring(0, fieldPath.lastIndexOf('.'))
-        : '';
+      const parentPath = fieldPath.includes('.') ? fieldPath.substring(0, fieldPath.lastIndexOf('.')) : '';
       const conflictPath = rawConflictPath.includes('.')
         ? rawConflictPath
         : parentPath
@@ -360,17 +354,14 @@ export function validateResourcePayload(
   }
 
   if (constraintViolations.length > 0) {
-    warnings.push(
-      `Constraint violations:\n${constraintViolations.map((v) => `• ${v.message}`).join('\n')}`,
-    );
+    warnings.push(`Constraint violations:\n${constraintViolations.map((v) => `• ${v.message}`).join('\n')}`);
   }
   if (conflicts.length > 0) {
     warnings.push(`Field conflicts:\n${conflicts.map((c) => `• ${c.message}`).join('\n')}`);
   }
 
   const result: ValidationResult = {
-    valid:
-      missingFields.length === 0 && constraintViolations.length === 0 && conflicts.length === 0,
+    valid: missingFields.length === 0 && constraintViolations.length === 0 && conflicts.length === 0,
     missingFields,
     serverDefaultedFields,
     constraintViolations,
@@ -395,11 +386,7 @@ export function validateResourcePayload(
  * @param fieldPath - The field path to check
  * @returns True if the field is required
  */
-export function isFieldRequired(
-  resourceKey: string,
-  operation: 'create' | 'update',
-  fieldPath: string,
-): boolean {
+export function isFieldRequired(resourceKey: string, operation: 'create' | 'update', fieldPath: string): boolean {
   const requiredFields = getRequiredFields(resourceKey, operation);
   return requiredFields.includes(fieldPath);
 }
@@ -411,10 +398,7 @@ export function isFieldRequired(
  * @param operation - The operation type
  * @returns Array of human-readable required field names
  */
-export function getRequiredFieldsSummary(
-  resourceKey: string,
-  operation: 'create' | 'update',
-): string[] {
+export function getRequiredFieldsSummary(resourceKey: string, operation: 'create' | 'update'): string[] {
   const requiredFields = getRequiredFields(resourceKey, operation);
   const payloadFields = filterPayloadFields(requiredFields);
   return payloadFields.map(formatFieldName);

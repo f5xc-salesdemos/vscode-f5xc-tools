@@ -4,11 +4,7 @@
  * Unit tests for the Schema Registry
  */
 
-import {
-  getSchemaRegistry,
-  resetSchemaRegistry,
-  SchemaRegistry,
-} from '../../schema/schemaRegistry';
+import { getSchemaRegistry, resetSchemaRegistry, SchemaRegistry } from '../../schema/schemaRegistry';
 
 // Mock vscode module
 jest.mock(

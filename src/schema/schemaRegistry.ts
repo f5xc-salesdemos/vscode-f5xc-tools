@@ -118,12 +118,7 @@ export class SchemaRegistry {
    * This can improve performance for frequently accessed resources.
    */
   prewarmCache(resourceTypes?: string[]): void {
-    const typesToWarm = resourceTypes || [
-      'http_loadbalancer',
-      'origin_pool',
-      'healthcheck',
-      'app_firewall',
-    ];
+    const typesToWarm = resourceTypes || ['http_loadbalancer', 'origin_pool', 'healthcheck', 'app_firewall'];
 
     for (const type of typesToWarm) {
       this.getOrGenerateSchema(type);

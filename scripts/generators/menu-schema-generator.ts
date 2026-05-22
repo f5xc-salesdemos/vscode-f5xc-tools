@@ -204,8 +204,7 @@ function deriveScope(paths: PathAnalysis[]): { scope: NamespaceScope; reason: st
   if (hasNamespaceParam) {
     return {
       scope: 'any',
-      reason:
-        'Has parameterized {namespace} path - available in user namespaces (shared, default, custom)',
+      reason: 'Has parameterized {namespace} path - available in user namespaces (shared, default, custom)',
     };
   }
 
@@ -284,15 +283,12 @@ function parseSpec(filePath: string): ResourceAnalysis | null {
 
     // Extract display name and description
     const displayName =
-      spec.info?.title ||
-      resourceKey.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+      spec.info?.title || resourceKey.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
     const descriptionRaw = spec.info?.description || '';
 
     // Determine API base from paths
     const pathKeys = Object.keys(spec.paths || {});
-    const apiBase: 'config' | 'web' = pathKeys.some((p) => p.startsWith('/api/web'))
-      ? 'web'
-      : 'config';
+    const apiBase: 'config' | 'web' = pathKeys.some((p) => p.startsWith('/api/web')) ? 'web' : 'config';
 
     // Analyze all paths
     const paths = pathKeys.map(analyzePath);

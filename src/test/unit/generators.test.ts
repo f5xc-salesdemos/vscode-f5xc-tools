@@ -84,8 +84,7 @@ function formatDisplayName(title: string | undefined, resourceKey: string): stri
 describe('Generator Utilities', () => {
   describe('extractSchemaId', () => {
     it('should extract schema ID from valid filename', () => {
-      const filename =
-        'docs-cloud-f5-com.0073.public.ves.io.schema.views.http_loadbalancer.ves-swagger.json';
+      const filename = 'docs-cloud-f5-com.0073.public.ves.io.schema.views.http_loadbalancer.ves-swagger.json';
       expect(extractSchemaId(filename)).toBe('ves.io.schema.views.http_loadbalancer');
     });
 
@@ -101,8 +100,7 @@ describe('Generator Utilities', () => {
     });
 
     it('should handle nested schema IDs', () => {
-      const filename =
-        'docs-cloud-f5-com.0042.public.ves.io.schema.api_sec.api_crawler.ves-swagger.json';
+      const filename = 'docs-cloud-f5-com.0042.public.ves.io.schema.api_sec.api_crawler.ves-swagger.json';
       expect(extractSchemaId(filename)).toBe('ves.io.schema.api_sec.api_crawler');
     });
   });
@@ -152,9 +150,7 @@ describe('Generator Utilities', () => {
     });
 
     it('should return any for parameterized namespace paths', () => {
-      expect(deriveNamespaceScope('/api/config/namespaces/{namespace}/http_loadbalancers')).toBe(
-        'any',
-      );
+      expect(deriveNamespaceScope('/api/config/namespaces/{namespace}/http_loadbalancers')).toBe('any');
       expect(deriveNamespaceScope('/api/config/namespaces/{ns}/resources')).toBe('any');
     });
 

@@ -49,9 +49,7 @@ export interface CertAuthConfig {
 /**
  * Combined auth configuration
  */
-export type AuthConfig =
-  | { type: 'token'; config: TokenAuthConfig }
-  | { type: 'cert'; config: CertAuthConfig };
+export type AuthConfig = { type: 'token'; config: TokenAuthConfig } | { type: 'cert'; config: CertAuthConfig };
 
 export { CertAuthProvider } from './certAuth';
 export { TokenAuthProvider } from './tokenAuth';

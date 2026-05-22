@@ -163,11 +163,7 @@ export class SubscriptionDashboardProvider {
   /**
    * Handle addon activation request from webview
    */
-  private async handleActivateAddon(
-    addonName: string,
-    addonDisplayName: string,
-    profileName: string,
-  ): Promise<void> {
+  private async handleActivateAddon(addonName: string, addonDisplayName: string, profileName: string): Promise<void> {
     // Show confirmation dialog
     const confirm = await vscode.window.showInformationMessage(
       `Activate "${addonDisplayName}"?\n\nThis will create a pending subscription request. Activation may require approval from F5 support.`,
@@ -244,10 +240,7 @@ export class SubscriptionDashboardProvider {
   /**
    * Generate Plan dashboard HTML
    */
-  private getPlanWebviewContent(
-    planInfo: PlanInfo,
-    accessStatuses: Map<string, AccessStatus>,
-  ): string {
+  private getPlanWebviewContent(planInfo: PlanInfo, accessStatuses: Map<string, AccessStatus>): string {
     const nonce = this.getNonce();
     const cspSource = this.planPanel?.webview.cspSource;
 
@@ -414,9 +407,7 @@ export class SubscriptionDashboardProvider {
     const tierLabel = addon.tier === 'advanced' ? 'Advanced' : 'Standard';
 
     // Show addon name only when there are multiple addons in the same category
-    const nameHtml = showName
-      ? `<span class="addon-name">${this.escapeHtml(addon.displayName)}</span>`
-      : '';
+    const nameHtml = showName ? `<span class="addon-name">${this.escapeHtml(addon.displayName)}</span>` : '';
 
     // Generate activate button for available (not active) addons
     let actionHtml = '';

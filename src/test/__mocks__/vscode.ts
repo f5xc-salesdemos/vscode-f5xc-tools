@@ -166,9 +166,7 @@ export const window = {
     onDidExpandElement: jest.fn(),
   })),
   registerTreeDataProvider: jest.fn(),
-  withProgress: jest.fn((_options, task) =>
-    task({ report: jest.fn() }, { isCancellationRequested: false }),
-  ),
+  withProgress: jest.fn((_options, task) => task({ report: jest.fn() }, { isCancellationRequested: false })),
   activeTextEditor: undefined,
   visibleTextEditors: [],
   onDidChangeActiveTextEditor: jest.fn(),

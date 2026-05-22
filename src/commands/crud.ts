@@ -21,11 +21,7 @@ import type { F5XCExplorerProvider, NamespaceNode, ResourceNode } from '../tree/
 import type { ResourceNodeData } from '../tree/treeTypes';
 import { showInfo, showWarning, withErrorHandling } from '../utils/errors';
 import { getLogger } from '../utils/logger';
-import {
-  filterResource,
-  getFilterOptionsForViewMode,
-  type ViewMode,
-} from '../utils/resourceFilter';
+import { filterResource, getFilterOptionsForViewMode, type ViewMode } from '../utils/resourceFilter';
 import { validateResourcePayload } from '../utils/validation';
 
 const logger = getLogger();
@@ -45,10 +41,7 @@ interface WebviewResourceData {
  */
 function isResourceNode(arg: unknown): arg is ResourceNode {
   return (
-    typeof arg === 'object' &&
-    arg !== null &&
-    'getData' in arg &&
-    typeof (arg as ResourceNode).getData === 'function'
+    typeof arg === 'object' && arg !== null && 'getData' in arg && typeof (arg as ResourceNode).getData === 'function'
   );
 }
 
@@ -83,12 +76,7 @@ export function registerCrudCommands(
         }
 
         // Create f5xc-view:// URI for read-only viewing
-        const uri = F5XCViewProvider.createUri(
-          data.profileName,
-          data.namespace,
-          data.resourceType.apiPath,
-          data.name,
-        );
+        const uri = F5XCViewProvider.createUri(data.profileName, data.namespace, data.resourceType.apiPath, data.name);
 
         // Refresh the content to ensure fresh data
         viewProvider.refresh(uri);
@@ -125,69 +113,61 @@ export function registerCrudCommands(
   // EDIT - Open resource for editing using f5xc:// virtual file system
   // Supports both ResourceNode (from tree view) and WebviewResourceData (from describe webview)
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      'f5xc.edit',
-      async (arg: ResourceNode | WebviewResourceData) => {
-        await withErrorHandling(async () => {
-          let data: ResourceNodeData;
+    vscode.commands.registerCommand('f5xc.edit', async (arg: ResourceNode | WebviewResourceData) => {
+      await withErrorHandling(async () => {
+        let data: ResourceNodeData;
 
-          if (isResourceNode(arg)) {
-            // Called from tree view with ResourceNode
-            data = arg.getData();
-          } else {
-            // Called from webview with plain object
-            const resourceType = getResourceTypeByApiPath(arg.resourceType);
-            if (!resourceType) {
-              showWarning(`Unknown resource type: ${arg.resourceType}`);
-              return;
-            }
-
-            // Find the resourceTypeKey from RESOURCE_TYPES
-            const resourceTypeKey = Object.entries(RESOURCE_TYPES).find(
-              ([, info]) => info.apiPath === arg.resourceType,
-            )?.[0];
-
-            if (!resourceTypeKey) {
-              showWarning(`Could not find resource type key for: ${arg.resourceType}`);
-              return;
-            }
-
-            data = {
-              name: arg.resourceName,
-              namespace: arg.namespace,
-              resourceType: resourceType,
-              resourceTypeKey: resourceTypeKey,
-              profileName: arg.profileName,
-            };
-          }
-
-          const profile = await profileManager.getProfile(data.profileName);
-
-          if (!profile) {
-            showWarning(`Profile "${data.profileName}" not found`);
+        if (isResourceNode(arg)) {
+          // Called from tree view with ResourceNode
+          data = arg.getData();
+        } else {
+          // Called from webview with plain object
+          const resourceType = getResourceTypeByApiPath(arg.resourceType);
+          if (!resourceType) {
+            showWarning(`Unknown resource type: ${arg.resourceType}`);
             return;
           }
 
-          // Create f5xc:// URI for the resource
-          const uri = F5XCFileSystemProvider.createUri(
-            data.profileName,
-            data.namespace,
-            data.resourceTypeKey,
-            data.name,
-          );
+          // Find the resourceTypeKey from RESOURCE_TYPES
+          const resourceTypeKey = Object.entries(RESOURCE_TYPES).find(
+            ([, info]) => info.apiPath === arg.resourceType,
+          )?.[0];
 
-          // Clear any cached content to ensure fresh data
-          fsProvider.clearCache(uri);
+          if (!resourceTypeKey) {
+            showWarning(`Could not find resource type key for: ${arg.resourceType}`);
+            return;
+          }
 
-          // Open the document using the f5xc:// file system
-          const doc = await vscode.workspace.openTextDocument(uri);
-          await vscode.window.showTextDocument(doc, { preview: false });
+          data = {
+            name: arg.resourceName,
+            namespace: arg.namespace,
+            resourceType: resourceType,
+            resourceTypeKey: resourceTypeKey,
+            profileName: arg.profileName,
+          };
+        }
 
-          logger.info(`Editing resource: ${data.name}`);
-          showInfo(`Editing ${data.name}. Press Cmd+S to save changes to F5 XC.`);
-        }, 'Edit resource');
-      },
-    ),
+        const profile = await profileManager.getProfile(data.profileName);
+
+        if (!profile) {
+          showWarning(`Profile "${data.profileName}" not found`);
+          return;
+        }
+
+        // Create f5xc:// URI for the resource
+        const uri = F5XCFileSystemProvider.createUri(data.profileName, data.namespace, data.resourceTypeKey, data.name);
+
+        // Clear any cached content to ensure fresh data
+        fsProvider.clearCache(uri);
+
+        // Open the document using the f5xc:// file system
+        const doc = await vscode.workspace.openTextDocument(uri);
+        await vscode.window.showTextDocument(doc, { preview: false });
+
+        logger.info(`Editing resource: ${data.name}`);
+        showInfo(`Editing ${data.name}. Press Cmd+S to save changes to F5 XC.`);
+      }, 'Edit resource');
+    }),
   );
 
   // CREATE - Create new resource from template
@@ -200,9 +180,7 @@ export function registerCrudCommands(
 
         // If called from tree view with resource type context
         if (arg && typeof arg === 'object' && 'getData' in arg) {
-          const nodeData = (
-            arg as { getData: () => { resourceTypeKey: string; namespace: string } }
-          ).getData();
+          const nodeData = (arg as { getData: () => { resourceTypeKey: string; namespace: string } }).getData();
           resourceTypeKey = nodeData.resourceTypeKey;
           namespace = nodeData.namespace;
         }
@@ -257,9 +235,7 @@ export function registerCrudCommands(
         });
 
         await vscode.window.showTextDocument(doc, { preview: false });
-        showInfo(
-          `Created template for ${resourceType.displayName}. Edit and use "F5 XC: Apply" to create.`,
-        );
+        showInfo(`Created template for ${resourceType.displayName}. Edit and use "F5 XC: Apply" to create.`);
       }, 'Create resource');
     }),
   );
@@ -296,9 +272,7 @@ export function registerCrudCommands(
         // Detect resource type from file name or content
         const resourceTypeKey = detectResourceType(document.fileName, resource);
         if (!resourceTypeKey) {
-          showWarning(
-            'Could not determine resource type. Use naming convention: *.{type}.f5xc.json',
-          );
+          showWarning('Could not determine resource type. Use naming convention: *.{type}.f5xc.json');
           return;
         }
 
@@ -322,14 +296,7 @@ export function registerCrudCommands(
         // Try to get existing resource to determine create vs update
         let exists = false;
         try {
-          await client.get(
-            namespace,
-            resourceType.apiPath,
-            name,
-            undefined,
-            apiBase,
-            serviceSegment,
-          );
+          await client.get(namespace, resourceType.apiPath, name, undefined, apiBase, serviceSegment);
           exists = true;
         } catch {
           exists = false;
@@ -377,22 +344,9 @@ export function registerCrudCommands(
           async () => {
             const resourceData = resource as Resource;
             if (exists) {
-              await client.replace(
-                namespace,
-                resourceType.apiPath,
-                name,
-                resourceData,
-                apiBase,
-                serviceSegment,
-              );
+              await client.replace(namespace, resourceType.apiPath, name, resourceData, apiBase, serviceSegment);
             } else {
-              await client.create(
-                namespace,
-                resourceType.apiPath,
-                resourceData,
-                apiBase,
-                serviceSegment,
-              );
+              await client.create(namespace, resourceType.apiPath, resourceData, apiBase, serviceSegment);
             }
           },
         );
@@ -445,10 +399,7 @@ export function registerCrudCommands(
         // Determine whether to show confirmation based on settings
         const config = vscode.workspace.getConfiguration('f5xc');
         const confirmDelete = config.get<boolean>('confirmDelete', true);
-        const confirmationLevel = config.get<'always' | 'high-only' | 'never'>(
-          'deleteConfirmationLevel',
-          'always',
-        );
+        const confirmationLevel = config.get<'always' | 'high-only' | 'never'>('deleteConfirmationLevel', 'always');
 
         // Determine if we should show confirmation
         let showConfirmation = confirmDelete; // Legacy setting takes precedence if false
@@ -516,14 +467,7 @@ export function registerCrudCommands(
             cancellable: false,
           },
           async () => {
-            await client.delete(
-              data.namespace,
-              data.resourceType.apiPath,
-              data.name,
-              false,
-              apiBase,
-              serviceSegment,
-            );
+            await client.delete(data.namespace, data.resourceType.apiPath, data.name, false, apiBase, serviceSegment);
           },
         );
 
@@ -564,9 +508,7 @@ export function registerCrudCommands(
         );
 
         if (!hasPermission) {
-          showWarning(
-            `Permission denied: You do not have access to delete namespace "${data.name}".`,
-          );
+          showWarning(`Permission denied: You do not have access to delete namespace "${data.name}".`);
           return;
         }
 
@@ -715,17 +657,10 @@ export function registerCrudCommands(
           }
         })();
 
-        context.subscriptions.push(
-          vscode.workspace.registerTextDocumentContentProvider('f5xc-remote', provider),
-        );
+        context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('f5xc-remote', provider));
 
         // Show diff
-        await vscode.commands.executeCommand(
-          'vscode.diff',
-          remoteUri,
-          localUri,
-          `${name} (Remote ↔ Local)`,
-        );
+        await vscode.commands.executeCommand('vscode.diff', remoteUri, localUri, `${name} (Remote ↔ Local)`);
       }, 'Compare with remote');
     }),
   );
@@ -746,21 +681,12 @@ export function registerCrudCommands(
         const data = node.getData();
         const client = await profileManager.getClient(data.profileName);
         const apiBase = data.resourceType.apiBase || 'config';
-        const resource = await client.get(
-          data.namespace,
-          data.resourceType.apiPath,
-          data.name,
-          undefined,
-          apiBase,
-        );
+        const resource = await client.get(data.namespace, data.resourceType.apiPath, data.name, undefined, apiBase);
 
         // Apply view mode filtering
         const viewMode = getViewMode();
         const filterOptions = getFilterOptionsForViewMode(viewMode);
-        const filteredResource = filterResource(
-          resource as unknown as Record<string, unknown>,
-          filterOptions,
-        );
+        const filteredResource = filterResource(resource as unknown as Record<string, unknown>, filterOptions);
 
         const json = JSON.stringify(filteredResource, null, 2);
         await vscode.env.clipboard.writeText(json);
@@ -798,9 +724,7 @@ export function registerCrudCommands(
       await config.update('viewMode', newMode, vscode.ConfigurationTarget.Global);
 
       const modeDescription =
-        newMode === 'console'
-          ? 'Console View (clean, filtered output)'
-          : 'Full API View (complete response)';
+        newMode === 'console' ? 'Console View (clean, filtered output)' : 'Full API View (complete response)';
       showInfo(`Switched to ${modeDescription}`);
       logger.info(`View mode changed to: ${newMode}`);
     }),
@@ -844,10 +768,7 @@ function setNestedValue(obj: Record<string, unknown>, path: string, value: unkno
  * @param includeRecommended - Whether to include recommended values (default: true)
  * @returns Object with spec defaults and recommended values populated
  */
-function buildSpecWithDefaults(
-  resourceTypeKey: string,
-  includeRecommended: boolean = true,
-): Record<string, unknown> {
+function buildSpecWithDefaults(resourceTypeKey: string, includeRecommended: boolean = true): Record<string, unknown> {
   const defaults = getFieldDefaults(resourceTypeKey);
   const recommended = includeRecommended ? getRecommendedValues(resourceTypeKey) : {};
   const spec: Record<string, unknown> = {};

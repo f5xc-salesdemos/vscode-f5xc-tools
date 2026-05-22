@@ -137,11 +137,7 @@ export async function withErrorHandling<T>(
       // Try to get a smart error message if we have resource context
       let smartMessage: string | undefined;
       if (options?.resourceTypeKey && options?.operation) {
-        smartMessage = getEnrichedErrorMessage(
-          options.resourceTypeKey,
-          options.operation,
-          error.statusCode,
-        );
+        smartMessage = getEnrichedErrorMessage(options.resourceTypeKey, options.operation, error.statusCode);
       }
 
       if (error.isUnauthorized) {

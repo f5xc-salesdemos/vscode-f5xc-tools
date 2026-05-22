@@ -1150,10 +1150,7 @@ export function isBuiltInNamespace(namespace: string): boolean {
  * - 'shared': Only available in shared namespace (rare)
  * - 'any': Available in user namespaces (shared, default, custom) but NOT system
  */
-export function isResourceTypeAvailableForNamespace(
-  resourceType: ResourceTypeInfo,
-  namespace: string,
-): boolean {
+export function isResourceTypeAvailableForNamespace(resourceType: ResourceTypeInfo, namespace: string): boolean {
   const scope = resourceType.namespaceScope || 'any';
 
   switch (scope) {
@@ -1221,10 +1218,7 @@ export { API_ENDPOINTS, BUILT_IN_NAMESPACES };
  * @param operation - The CRUD operation type
  * @returns The operation metadata or undefined if not available
  */
-export function getOperationMetadata(
-  resourceKey: string,
-  operation: CrudOperation,
-): OperationMetadata | undefined {
+export function getOperationMetadata(resourceKey: string, operation: CrudOperation): OperationMetadata | undefined {
   const generated = GENERATED_RESOURCE_TYPES[resourceKey];
   return generated?.operationMetadata?.[operation];
 }
@@ -1237,10 +1231,7 @@ export function getOperationMetadata(
  * @param operation - The CRUD operation type (default: 'delete' as most common use case)
  * @returns The danger level ('low', 'medium', or 'high')
  */
-export function getDangerLevel(
-  resourceKey: string,
-  operation: CrudOperation = 'delete',
-): DangerLevel {
+export function getDangerLevel(resourceKey: string, operation: CrudOperation = 'delete'): DangerLevel {
   const metadata = getOperationMetadata(resourceKey, operation);
   return metadata?.dangerLevel ?? 'medium';
 }
@@ -1252,10 +1243,7 @@ export function getDangerLevel(
  * @param operation - The CRUD operation type
  * @returns The purpose string or undefined
  */
-export function getOperationPurpose(
-  resourceKey: string,
-  operation: CrudOperation,
-): string | undefined {
+export function getOperationPurpose(resourceKey: string, operation: CrudOperation): string | undefined {
   const metadata = getOperationMetadata(resourceKey, operation);
   return metadata?.purpose;
 }
@@ -1279,10 +1267,7 @@ export function getRequiredFields(resourceKey: string, operation: 'create' | 'up
  * @param operation - The CRUD operation type
  * @returns Side effects object or undefined
  */
-export function getSideEffects(
-  resourceKey: string,
-  operation: CrudOperation,
-): SideEffects | undefined {
+export function getSideEffects(resourceKey: string, operation: CrudOperation): SideEffects | undefined {
   const metadata = getOperationMetadata(resourceKey, operation);
   return metadata?.sideEffects;
 }
@@ -1354,9 +1339,7 @@ export function getPrerequisites(resourceKey: string, operation: CrudOperation):
  * @param resourceKey - The resource type key
  * @returns The full ResourceOperationMetadata or undefined
  */
-export function getAllOperationMetadata(
-  resourceKey: string,
-): ResourceOperationMetadata | undefined {
+export function getAllOperationMetadata(resourceKey: string): ResourceOperationMetadata | undefined {
   const generated = GENERATED_RESOURCE_TYPES[resourceKey];
   return generated?.operationMetadata;
 }
@@ -1509,10 +1492,7 @@ export function isFieldServerDefaulted(resourceKey: string, fieldPath: string): 
  * @param operation - The operation type ('create' or 'update'), defaults to 'create'
  * @returns Array of field paths that user must provide
  */
-export function getUserRequiredFields(
-  resourceKey: string,
-  operation: 'create' | 'update' = 'create',
-): string[] {
+export function getUserRequiredFields(resourceKey: string, operation: 'create' | 'update' = 'create'): string[] {
   const generated = GENERATED_RESOURCE_TYPES[resourceKey];
   const fieldMetadata = generated?.fieldMetadata;
   if (!fieldMetadata) {

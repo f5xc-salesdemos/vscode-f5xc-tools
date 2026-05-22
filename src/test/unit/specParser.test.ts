@@ -576,15 +576,9 @@ describe('Spec Parser - parseAllDomainFiles', () => {
           continue;
         }
         for (const meta of Object.values(r.fieldMetadata.fields)) {
-          if (
-            meta.constraints &&
-            (meta.constraints.minimum !== undefined || meta.constraints.maximum !== undefined)
-          ) {
+          if (meta.constraints && (meta.constraints.minimum !== undefined || meta.constraints.maximum !== undefined)) {
             foundNumeric = true;
-            expect(
-              typeof meta.constraints.minimum === 'number' ||
-                meta.constraints.minimum === undefined,
-            ).toBe(true);
+            expect(typeof meta.constraints.minimum === 'number' || meta.constraints.minimum === undefined).toBe(true);
             break;
           }
         }

@@ -74,9 +74,7 @@ describe('Resource Types Registry', () => {
       const loadBalancingTypes = getResourceTypesByCategory(ResourceCategory.LoadBalancing);
 
       expect(loadBalancingTypes.length).toBeGreaterThan(0);
-      expect(loadBalancingTypes.every((r) => r.category === ResourceCategory.LoadBalancing)).toBe(
-        true,
-      );
+      expect(loadBalancingTypes.every((r) => r.category === ResourceCategory.LoadBalancing)).toBe(true);
     });
 
     it('should return security resource types', () => {

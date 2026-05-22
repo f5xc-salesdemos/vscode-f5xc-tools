@@ -85,16 +85,11 @@ export class HealthcheckFormProvider {
       return;
     }
 
-    this.panel = vscode.window.createWebviewPanel(
-      'f5xcHealthcheckForm',
-      'Create Healthcheck',
-      vscode.ViewColumn.One,
-      {
-        enableScripts: true,
-        retainContextWhenHidden: true,
-        localResourceRoots: [], // Toolkit loaded from CDN, no local resources needed
-      },
-    );
+    this.panel = vscode.window.createWebviewPanel('f5xcHealthcheckForm', 'Create Healthcheck', vscode.ViewColumn.One, {
+      enableScripts: true,
+      retainContextWhenHidden: true,
+      localResourceRoots: [], // Toolkit loaded from CDN, no local resources needed
+    });
 
     this.panel.onDidDispose(() => {
       this.panel = undefined;
@@ -184,9 +179,7 @@ export class HealthcheckFormProvider {
       case 'name':
         if (typeof value === 'string') {
           if (!value.match(/^[a-z0-9][a-z0-9-]*[a-z0-9]$/) && value.length > 1) {
-            errors.push(
-              'Name must be lowercase alphanumeric with hyphens, cannot start/end with hyphen',
-            );
+            errors.push('Name must be lowercase alphanumeric with hyphens, cannot start/end with hyphen');
           }
         }
         break;
@@ -328,9 +321,7 @@ export class HealthcheckFormProvider {
     }
 
     if (data.expectedResponse) {
-      config.expected_response = data.expectedResponseHex
-        ? `hex:${data.expectedResponse}`
-        : data.expectedResponse;
+      config.expected_response = data.expectedResponseHex ? `hex:${data.expectedResponse}` : data.expectedResponse;
     }
 
     return config;
@@ -382,12 +373,7 @@ export class HealthcheckFormProvider {
       this.panel?.dispose();
 
       // Show the describe view for the newly created resource
-      await this.describeProvider.showDescribe(
-        activeProfile.name,
-        data.namespace,
-        'healthchecks',
-        data.name,
-      );
+      await this.describeProvider.showDescribe(activeProfile.name, data.namespace, 'healthchecks', data.name);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       logger.error(`Failed to create healthcheck: ${message}`);

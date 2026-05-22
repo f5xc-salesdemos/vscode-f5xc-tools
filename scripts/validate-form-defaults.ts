@@ -56,16 +56,7 @@ function extractFormDefaults(): FormDefault[] {
       const id = match[1];
       const value = match[2];
       // Skip non-healthcheck fields
-      if (
-        ![
-          'interval',
-          'timeout',
-          'jitter',
-          'healthy-threshold',
-          'unhealthy-threshold',
-          'path',
-        ].includes(id)
-      ) {
+      if (!['interval', 'timeout', 'jitter', 'healthy-threshold', 'unhealthy-threshold', 'path'].includes(id)) {
         return;
       }
       defaults.push({
@@ -158,22 +149,16 @@ function validateDefaults(): boolean {
     field.specValue = getSpecRecommendation(field.fieldName);
 
     if (field.specValue === undefined) {
-      console.log(
-        `${field.fieldName.padEnd(24)} | ${field.formValue.padEnd(10)} | (no spec)      | SKIP`,
-      );
+      console.log(`${field.fieldName.padEnd(24)} | ${field.formValue.padEnd(10)} | (no spec)      | SKIP`);
       return;
     }
 
-    const specStr = Array.isArray(field.specValue)
-      ? JSON.stringify(field.specValue)
-      : String(field.specValue);
+    const specStr = Array.isArray(field.specValue) ? JSON.stringify(field.specValue) : String(field.specValue);
 
     const match = valuesMatch(field.formValue, field.specValue);
     const status = match ? '✅ MATCH' : '❌ MISMATCH';
 
-    console.log(
-      `${field.fieldName.padEnd(24)} | ${field.formValue.padEnd(10)} | ${specStr.padEnd(14)} | ${status}`,
-    );
+    console.log(`${field.fieldName.padEnd(24)} | ${field.formValue.padEnd(10)} | ${specStr.padEnd(14)} | ${status}`);
 
     if (!match) {
       hasErrors = true;

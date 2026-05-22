@@ -254,17 +254,13 @@ export class ProfileManager {
 
           if (isValid) {
             this.logger.info('Using environment variable credentials');
-            this.logger.debug(
-              `Creating client for profile: ${profileName}, apiUrl: ${envProfile.apiUrl}`,
-            );
+            this.logger.debug(`Creating client for profile: ${profileName}, apiUrl: ${envProfile.apiUrl}`);
             const client = new F5XCClient(envProfile.apiUrl, envAuthProvider);
             this.authProviderCache.set(profileName, envAuthProvider);
             this.clientCache.set(profileName, client);
             return client;
           } else {
-            this.logger.warn(
-              'Environment variable credentials are invalid, falling back to profile credentials',
-            );
+            this.logger.warn('Environment variable credentials are invalid, falling back to profile credentials');
             envAuthProvider.dispose();
           }
         } catch (error) {

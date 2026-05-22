@@ -476,14 +476,12 @@ export function extractApiInfo(paths: Record<string, PathItem> | undefined): {
   // Universal pattern for extended paths with service segment
   // Matches: /api/{base}/{service}/namespaces/{ns}/resource_types
   // Example: /api/config/dns/namespaces/{ns}/dns_zones
-  const extendedPattern =
-    /^\/api\/([a-z_-]+)\/([a-z_]+)\/namespaces\/(?:\{[^}]+\}|[a-z]+)\/([a-z_]+)(?:\/\{[^}]+\})?$/;
+  const extendedPattern = /^\/api\/([a-z_-]+)\/([a-z_]+)\/namespaces\/(?:\{[^}]+\}|[a-z]+)\/([a-z_]+)(?:\/\{[^}]+\})?$/;
 
   // Universal pattern for standard namespace-scoped paths
   // Matches: /api/{base}/namespaces/{ns}/resource_types
   // Example: /api/infraprotect/namespaces/{ns}/infraprotect_asns
-  const namespacePattern =
-    /^\/api\/([a-z_-]+)\/namespaces\/(?:\{[^}]+\}|[a-z]+)\/([a-z_]+)(?:\/\{[^}]+\})?$/;
+  const namespacePattern = /^\/api\/([a-z_-]+)\/namespaces\/(?:\{[^}]+\}|[a-z]+)\/([a-z_]+)(?:\/\{[^}]+\})?$/;
 
   // Universal pattern for tenant-level resources (no namespace)
   // Matches: /api/{base}/resource_types
@@ -673,9 +671,7 @@ export function parseSpecFile(filePath: string): ParsedSpecInfo | null {
 
   // Get documentation URL
   const operationUrl = extractDocUrl(spec);
-  const documentationUrl = operationUrl
-    ? transformToGeneralDocUrl(operationUrl, schemaId)
-    : undefined;
+  const documentationUrl = operationUrl ? transformToGeneralDocUrl(operationUrl, schemaId) : undefined;
 
   // Build the fullApiPath with service segment if present
   let fullApiPath: string;
@@ -990,8 +986,7 @@ function extractFieldMetadataFromProperty(
   const hasExample = prop['x-f5xc-example'] !== undefined;
   const hasConstraints = prop['x-f5xc-constraints'] !== undefined;
   const hasMinConfig = prop['x-f5xc-minimum-configuration'] === true;
-  const hasConflicts =
-    Array.isArray(prop['x-f5xc-conflicts-with']) && prop['x-f5xc-conflicts-with'].length > 0;
+  const hasConflicts = Array.isArray(prop['x-f5xc-conflicts-with']) && prop['x-f5xc-conflicts-with'].length > 0;
   const hasRecOneof = prop['x-f5xc-recommended-oneof-variant'] !== undefined;
 
   // Determine effective recommended value with priority
@@ -1172,12 +1167,7 @@ function extractFieldMetadataFromProperty(
   if (Array.isArray(rawAllOf)) {
     for (const allOfItem of rawAllOf) {
       if (allOfItem && typeof allOfItem === 'object') {
-        extractFieldMetadataFromProperty(
-          allOfItem as Record<string, unknown>,
-          basePath,
-          metadata,
-          schemas,
-        );
+        extractFieldMetadataFromProperty(allOfItem as Record<string, unknown>, basePath, metadata, schemas);
       }
     }
   }
@@ -1230,10 +1220,7 @@ function extractFieldMetadataFromSchema(
  * @param resourceKey - The resource key (e.g., 'app_firewall')
  * @returns The schema name if found
  */
-function findCreateSpecSchemaName(
-  schemas: Record<string, SchemaObject>,
-  resourceKey: string,
-): string | undefined {
+function findCreateSpecSchemaName(schemas: Record<string, SchemaObject>, resourceKey: string): string | undefined {
   // Convert resource key to schema prefix patterns
   // e.g., 'http_loadbalancer' -> 'http_loadbalancer', 'httpLoadbalancer', 'http_Loadbalancer'
   // Also handle views-prefixed schemas (e.g., 'viewsorigin_poolCreateSpecType' for 'origin_pool')
@@ -1381,8 +1368,7 @@ export function parseDomainFile(filePath: string): ParsedSpecInfo[] {
   // Pattern for list endpoints (plural resource path)
   // Matches: /api/config/namespaces/{metadata.namespace}/http_loadbalancers
   // Also matches extended paths: /api/config/dns/namespaces/{ns}/dns_zones
-  const listEndpointPattern =
-    /^\/api\/([a-z_-]+)(?:\/([a-z_]+))?\/namespaces\/(?:\{[^}]+\}|system|shared)\/([a-z_]+)$/;
+  const listEndpointPattern = /^\/api\/([a-z_-]+)(?:\/([a-z_]+))?\/namespaces\/(?:\{[^}]+\}|system|shared)\/([a-z_]+)$/;
 
   const seen = new Set<string>();
 

@@ -106,10 +106,7 @@ export function extractResourceTypeFromFilename(filename: string): string | unde
  * Parse JSON structure to determine current context at cursor position.
  * Handles incomplete/invalid JSON gracefully.
  */
-export function getCurrentJsonContext(
-  document: vscode.TextDocument,
-  position: vscode.Position,
-): JsonContext {
+export function getCurrentJsonContext(document: vscode.TextDocument, position: vscode.Position): JsonContext {
   const text = document.getText();
   const offset = document.offsetAt(position);
 
@@ -298,10 +295,7 @@ export function parseJsonPath(textBeforeCursor: string): string[] {
  * Navigate schema structure following a path.
  * Returns the schema node at the path, or undefined if not found.
  */
-export function navigateSchemaPath(
-  schema: SchemaProperty,
-  path: string[],
-): SchemaProperty | undefined {
+export function navigateSchemaPath(schema: SchemaProperty, path: string[]): SchemaProperty | undefined {
   let current: SchemaProperty | undefined = schema;
 
   for (const segment of path) {
@@ -391,10 +385,7 @@ export function formatValueForJson(value: unknown, type?: string | string[]): st
  * Create a snippet string with tab stops for multiple properties.
  * Tab stops allow user to navigate with Tab key.
  */
-export function createSnippetWithTabStops(
-  properties: PropertyInfo[],
-  indentString: string,
-): string {
+export function createSnippetWithTabStops(properties: PropertyInfo[], indentString: string): string {
   const lines: string[] = [];
   let tabStop = 1;
 

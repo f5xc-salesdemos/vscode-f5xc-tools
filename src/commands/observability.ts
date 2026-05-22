@@ -56,10 +56,7 @@ interface MetricsResponse {
 /**
  * Register observability commands for F5 XC resources
  */
-export function registerObservabilityCommands(
-  context: vscode.ExtensionContext,
-  profileManager: ProfileManager,
-): void {
+export function registerObservabilityCommands(context: vscode.ExtensionContext, profileManager: ProfileManager): void {
   // VIEW LOGS - View access logs for load balancer
   context.subscriptions.push(
     vscode.commands.registerCommand('f5xc.viewLogs', async (node: ResourceNode) => {
@@ -179,11 +176,7 @@ export function registerObservabilityCommands(
               });
 
               // Format metrics for display
-              const formattedMetrics = formatMetrics(
-                data.name,
-                data.resourceTypeKey,
-                metricsResponse,
-              );
+              const formattedMetrics = formatMetrics(data.name, data.resourceTypeKey, metricsResponse);
 
               // Display in a new document
               const doc = await vscode.workspace.openTextDocument({
@@ -267,9 +260,7 @@ function formatAccessLogs(logs: AccessLogEntry[]): string {
     lines.push(`  Source: ${srcIp} (${country}) | WAF: ${wafAction}`);
 
     if (log.user_agent) {
-      lines.push(
-        `  UA: ${log.user_agent.substring(0, 80)}${log.user_agent.length > 80 ? '...' : ''}`,
-      );
+      lines.push(`  UA: ${log.user_agent.substring(0, 80)}${log.user_agent.length > 80 ? '...' : ''}`);
     }
 
     lines.push('');

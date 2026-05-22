@@ -41,18 +41,12 @@ function fileExists(filePath: string): boolean {
  */
 function validateTypeScriptSyntax(filePath: string): { valid: boolean; errors: string[] } {
   const content = fs.readFileSync(filePath, 'utf-8');
-  const sourceFile = ts.createSourceFile(
-    path.basename(filePath),
-    content,
-    ts.ScriptTarget.Latest,
-    true,
-  );
+  const sourceFile = ts.createSourceFile(path.basename(filePath), content, ts.ScriptTarget.Latest, true);
 
   const errors: string[] = [];
 
   // Check for syntax errors
-  const diagnostics = (sourceFile as ts.SourceFile & { parseDiagnostics?: ts.Diagnostic[] })
-    .parseDiagnostics;
+  const diagnostics = (sourceFile as ts.SourceFile & { parseDiagnostics?: ts.Diagnostic[] }).parseDiagnostics;
   if (diagnostics && diagnostics.length > 0) {
     for (const diag of diagnostics) {
       const message = ts.flattenDiagnosticMessageText(diag.messageText, '\n');

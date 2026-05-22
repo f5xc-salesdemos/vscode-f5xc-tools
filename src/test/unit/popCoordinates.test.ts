@@ -171,11 +171,7 @@ describe('getPopCoordinates', () => {
       longitude: 60.0,
     });
 
-    const result = await getPopCoordinates(
-      'unknown',
-      'Ashburn (unknown), VA, United States',
-      mockGeocoder,
-    );
+    const result = await getPopCoordinates('unknown', 'Ashburn (unknown), VA, United States', mockGeocoder);
     expect(result).toEqual({
       latitude: 50.0,
       longitude: 60.0,

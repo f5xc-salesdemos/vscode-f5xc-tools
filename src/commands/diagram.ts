@@ -12,10 +12,7 @@ const logger = getLogger();
 /**
  * Register diagram commands for F5 XC HTTP Load Balancers
  */
-export function registerDiagramCommands(
-  context: vscode.ExtensionContext,
-  profileManager: ProfileManager,
-): void {
+export function registerDiagramCommands(context: vscode.ExtensionContext, profileManager: ProfileManager): void {
   // Create diagram provider instance
   const diagramProvider = new F5XCDiagramProvider(profileManager);
 

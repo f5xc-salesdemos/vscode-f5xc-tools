@@ -496,9 +496,7 @@ describe('Schema Generator', () => {
       let testedNested = false;
 
       for (const [key, rt] of Object.entries(TYPES)) {
-        const fm = (rt as Record<string, unknown>).fieldMetadata as
-          | { userRequiredFields?: string[] }
-          | undefined;
+        const fm = (rt as Record<string, unknown>).fieldMetadata as { userRequiredFields?: string[] } | undefined;
         if (!fm?.userRequiredFields) {
           continue;
         }

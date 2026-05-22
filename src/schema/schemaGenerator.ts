@@ -58,11 +58,7 @@ export interface F5XCJsonSchema {
  * Parse a dot-notation field path and set a value in a nested object.
  * Creates intermediate objects as needed.
  */
-function setNestedProperty(
-  obj: Record<string, SchemaProperty>,
-  path: string,
-  props: Partial<SchemaProperty>,
-): void {
+function setNestedProperty(obj: Record<string, SchemaProperty>, path: string, props: Partial<SchemaProperty>): void {
   const parts = path.split('.');
   let current = obj;
 
@@ -411,7 +407,5 @@ export function getSchemaResourceTypes(): string[] {
  */
 export function hasDetailedFieldMetadata(resourceTypeKey: string): boolean {
   const resourceType = GENERATED_RESOURCE_TYPES[resourceTypeKey];
-  return !!(
-    resourceType?.fieldMetadata?.fields && Object.keys(resourceType.fieldMetadata.fields).length > 0
-  );
+  return !!(resourceType?.fieldMetadata?.fields && Object.keys(resourceType.fieldMetadata.fields).length > 0);
 }

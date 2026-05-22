@@ -117,10 +117,7 @@ function applyScopeOverrides(specs: ParsedSpecInfo[], overrides: NamespaceScopeO
 /**
  * Apply display name overrides to parsed specs
  */
-function applyDisplayNameOverrides(
-  specs: ParsedSpecInfo[],
-  overrides: DisplayNameOverrides,
-): number {
+function applyDisplayNameOverrides(specs: ParsedSpecInfo[], overrides: DisplayNameOverrides): number {
   let count = 0;
 
   for (const spec of specs) {
@@ -327,10 +324,7 @@ function toGeneratedTypeInfo(info: ParsedSpecInfo): GeneratedResourceTypeInfo {
       if (info.fieldMetadata.userRequiredFields.length > 0) {
         result.fieldMetadata.userRequiredFields = info.fieldMetadata.userRequiredFields;
       }
-      if (
-        info.fieldMetadata.recommendedValueFields &&
-        info.fieldMetadata.recommendedValueFields.length > 0
-      ) {
+      if (info.fieldMetadata.recommendedValueFields && info.fieldMetadata.recommendedValueFields.length > 0) {
         result.fieldMetadata.recommendedValueFields = info.fieldMetadata.recommendedValueFields;
       }
       if (info.fieldMetadata.minimumConfigFields.length > 0) {
@@ -375,10 +369,7 @@ export function generateResourceTypesContent(specs: ParsedSpecInfo[]): string {
   // Pretty print with proper TypeScript formatting
   // Keep double quotes for values since they're properly escaped by JSON.stringify
   // Only remove quotes from keys that are valid JS identifiers (no dots, dashes, etc.)
-  const resourceTypesJson = JSON.stringify(resourceTypes, null, 2).replace(
-    /"([a-zA-Z_$][a-zA-Z0-9_$]*)":/g,
-    '$1:',
-  );
+  const resourceTypesJson = JSON.stringify(resourceTypes, null, 2).replace(/"([a-zA-Z_$][a-zA-Z0-9_$]*)":/g, '$1:');
 
   const apiPathToKeyJson = JSON.stringify(apiPathToKey, null, 2).replace(/"([^"]+)":/g, "'$1':"); // Use single quotes for keys in reverse lookup
 

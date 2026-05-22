@@ -128,12 +128,9 @@ function extractZip(zipPath: string, destDir: string): void {
   try {
     execFileSync('unzip', ['-o', zipPath, '-d', destDir], { stdio: 'pipe' });
   } catch (error) {
-    throw new Error(
-      `Failed to extract zip: ${error instanceof Error ? error.message : String(error)}`,
-      {
-        cause: error,
-      },
-    );
+    throw new Error(`Failed to extract zip: ${error instanceof Error ? error.message : String(error)}`, {
+      cause: error,
+    });
   }
 }
 
