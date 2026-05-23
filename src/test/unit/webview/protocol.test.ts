@@ -1,6 +1,12 @@
 // src/test/unit/webview/protocol.test.ts
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
+type ProtocolModule = typeof import('../../../../webview/src/lib/protocol');
+
+function loadProtocol(): ProtocolModule {
+  return require('../../../../webview/src/lib/protocol') as ProtocolModule;
+}
+
 describe('webview protocol', () => {
   let mockPostMessage: jest.Mock;
   let messageHandler: ((event: MessageEvent) => void) | null;
@@ -28,15 +34,15 @@ describe('webview protocol', () => {
     jest.restoreAllMocks();
   });
 
-  it('send posts message via vscode API', async () => {
-    const { initProtocol, send } = await import('../../../webview/src/lib/protocol');
+  it('send posts message via vscode API', () => {
+    const { initProtocol, send } = loadProtocol();
     initProtocol();
     send({ type: 'prompt', text: 'hello' });
     expect(mockPostMessage).toHaveBeenCalledWith({ type: 'prompt', text: 'hello' });
   });
 
-  it('on registers listener and receives events', async () => {
-    const { initProtocol, on } = await import('../../../webview/src/lib/protocol');
+  it('on registers listener and receives events', () => {
+    const { initProtocol, on } = loadProtocol();
     initProtocol();
 
     const received: unknown[] = [];
@@ -50,8 +56,8 @@ describe('webview protocol', () => {
     expect(received[0]).toEqual({ type: 'message_update', text: 'chunk' });
   });
 
-  it('on returns unsubscribe function', async () => {
-    const { initProtocol, on } = await import('../../../webview/src/lib/protocol');
+  it('on returns unsubscribe function', () => {
+    const { initProtocol, on } = loadProtocol();
     initProtocol();
 
     const received: unknown[] = [];
