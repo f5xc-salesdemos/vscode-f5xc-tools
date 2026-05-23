@@ -66,6 +66,14 @@ export default tseslint.config(
     },
   },
   {
+    files: ['webview/**/*.ts', 'webview/**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: './webview/tsconfig.json',
+      },
+    },
+  },
+  {
     ignores: [
       'out/**',
       'dist/**',
