@@ -14,7 +14,6 @@ const sharedTransform = {
 
 const sharedModuleNameMapper = {
   '^vscode$': '<rootDir>/src/test/__mocks__/vscode.ts',
-  '^webview/(.*)$': '<rootDir>/webview/$1',
 };
 
 /** @type {import('jest').Config} */

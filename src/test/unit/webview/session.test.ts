@@ -1,8 +1,8 @@
 // src/test/unit/webview/session.test.ts
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-import type { AssistantMessage } from 'webview/src/state/session';
-import { createSession } from 'webview/src/state/session';
+import type { AssistantMessage, TextBlock } from '../../../../webview/src/state/session';
+import { createSession } from '../../../../webview/src/state/session';
 
 describe('session state', () => {
   it('creates a session with default values', () => {
@@ -40,7 +40,8 @@ describe('session state', () => {
 
     session.appendAssistantText(' second');
     expect(session.messages).toHaveLength(1);
-    expect((session.messages[0] as unknown as AssistantMessage).blocks[0].text).toBe('first second');
+    const block = (session.messages[0] as unknown as AssistantMessage).blocks[0] as TextBlock;
+    expect(block.text).toBe('first second');
   });
 
   it('addToolStart adds a tool_use block', () => {

@@ -1,10 +1,16 @@
 // src/test/unit/webview/protocol.test.ts
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-type ProtocolModule = typeof import('../../../../webview/src/lib/protocol');
+import type { ExtensionMessage } from '../../../../webview/src/lib/protocol';
+
+type ProtocolModule = {
+  initProtocol: () => void;
+  send: (msg: unknown) => void;
+  on: (type: string, callback: (msg: ExtensionMessage) => void) => () => void;
+};
 
 function loadProtocol(): ProtocolModule {
-  return require('webview/src/lib/protocol') as ProtocolModule;
+  return require('../../../../webview/src/lib/protocol') as ProtocolModule;
 }
 
 describe('webview protocol', () => {

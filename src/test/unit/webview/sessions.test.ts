@@ -4,7 +4,7 @@
 type SessionsModule = typeof import('../../../../webview/src/state/sessions');
 
 function loadSessions(): SessionsModule {
-  return require('webview/src/state/sessions') as SessionsModule;
+  return require('../../../../webview/src/state/sessions') as SessionsModule;
 }
 
 describe('sessions manager', () => {
