@@ -1,16 +1,6 @@
 // webview/src/__tests__/protocol.test.ts
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-type ProtocolModule = {
-  initProtocol: () => void;
-  send: (msg: unknown) => void;
-  on: (type: string, callback: (msg: Record<string, unknown>) => void) => () => void;
-};
-
-function loadProtocol(): ProtocolModule {
-  return require('../lib/protocol') as ProtocolModule;
-}
-
 describe('webview protocol', () => {
   let mockPostMessage: jest.Mock;
   let messageHandler: ((event: MessageEvent) => void) | null;
@@ -37,6 +27,14 @@ describe('webview protocol', () => {
     delete (globalThis as unknown as Record<string, unknown>).acquireVsCodeApi;
     jest.restoreAllMocks();
   });
+
+  function loadProtocol() {
+    return require('../lib/protocol') as {
+      initProtocol: () => void;
+      send: (msg: unknown) => void;
+      on: (type: string, callback: (msg: Record<string, unknown>) => void) => () => void;
+    };
+  }
 
   it('send posts message via vscode API', () => {
     const { initProtocol, send } = loadProtocol();

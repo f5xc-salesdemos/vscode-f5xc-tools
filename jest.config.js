@@ -48,10 +48,7 @@ module.exports = {
       preset: 'ts-jest',
       testEnvironment: 'node',
       roots: ['<rootDir>/src'],
-      testMatch: [
-        '**/unit/**/*.test.ts',
-        ...(process.env.F5XC_API_URL ? ['**/integration/live*.test.ts'] : []),
-      ],
+      testMatch: ['**/unit/**/*.test.ts', ...(process.env.F5XC_API_URL ? ['**/integration/live*.test.ts'] : [])],
       testPathIgnorePatterns: [
         '/node_modules/',
         '/dist/',
@@ -70,7 +67,17 @@ module.exports = {
       testMatch: ['**/__tests__/**/*.test.ts'],
       testPathIgnorePatterns: ['/node_modules/', '/dist/', '/out/'],
       moduleFileExtensions: ['ts', 'js', 'json'],
-      transform: sharedTransform,
+      transform: {
+        '^.+\\.ts$': [
+          'ts-jest',
+          {
+            tsconfig: '<rootDir>/webview/tsconfig.test.json',
+            diagnostics: {
+              ignoreCodes: [151002, 2554, 2307, 7016, 7026, 17004, 7006],
+            },
+          },
+        ],
+      },
     },
   ],
 };
