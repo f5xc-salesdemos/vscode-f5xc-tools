@@ -1,7 +1,6 @@
 # Changelog
 
-All notable changes to the F5 Distributed Cloud Tools extension will be
-documented in this file.
+All notable changes to the xcsh extension will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Version numbers follow the upstream F5 XC API version as prefix.
@@ -143,13 +142,13 @@ Version numbers follow the upstream F5 XC API version as prefix.
 
 ### Added
 
-- Initial release of F5 Distributed Cloud Tools for VS Code
+- Initial release of xcsh for VS Code
 - Profile management with secure credential storage (VSCode SecretStorage)
 - Support for API Token and P12 certificate authentication (mTLS)
 - Resource Explorer tree view with hierarchical navigation
-- CRUD operations for F5 XC resources
+- CRUD operations for xcsh resources
 - JSON schema validation for resource configurations
-- Support for 40+ F5 XC resource types
+- Support for 40+ xcsh resource types
 - Keyboard shortcuts for common operations
 
 ### Security
