@@ -33,7 +33,7 @@ VS Code extension for managing F5 Distributed Cloud resources with IntelliSense 
 | Google Cloud | `brew install google-cloud-sdk` | `gcloud auth login` |
 | GitHub CLI | `brew install gh` | `gh auth login` |
 | GitLab CLI | `brew install glab` | `glab auth login` |
-| Terraform | `brew install terraform` | N/A |
+| Terraform | `brew install hashicorp/tap/terraform` | N/A |
 | Salesforce CLI | `brew install sf` | `sf org login web` |
 
 Run **xcsh: Platform Readiness** in VS Code to see which integrations are installed and authenticated.
