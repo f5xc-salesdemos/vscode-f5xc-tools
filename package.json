@@ -355,6 +355,54 @@
         "icon": "$(link-external)"
       },
       {
+        "command": "f5xc.exportJson",
+        "title": "%command.exportJson.title%",
+        "category": "xcsh",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "f5xc.exportYaml",
+        "title": "%command.exportYaml.title%",
+        "category": "xcsh",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "f5xc.exportAllJson",
+        "title": "%command.exportAllJson.title%",
+        "category": "xcsh",
+        "icon": "$(files)"
+      },
+      {
+        "command": "f5xc.exportAllYaml",
+        "title": "%command.exportAllYaml.title%",
+        "category": "xcsh",
+        "icon": "$(files)"
+      },
+      {
+        "command": "f5xc.fileApply",
+        "title": "%command.fileApply.title%",
+        "category": "xcsh",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "f5xc.fileCreate",
+        "title": "%command.fileCreate.title%",
+        "category": "xcsh",
+        "icon": "$(add)"
+      },
+      {
+        "command": "f5xc.fileDiff",
+        "title": "%command.fileDiff.title%",
+        "category": "xcsh",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "f5xc.fileDelete",
+        "title": "%command.fileDelete.title%",
+        "category": "xcsh",
+        "icon": "$(trash)"
+      },
+      {
         "command": "f5xc.toggleViewMode",
         "title": "%command.toggleViewMode.title%",
         "category": "xcsh",
@@ -587,6 +635,26 @@
           "group": "5_external@1"
         },
         {
+          "command": "f5xc.exportJson",
+          "when": "view == f5xc.explorer && viewItem =~ /^resource:/",
+          "group": "6_export@1"
+        },
+        {
+          "command": "f5xc.exportYaml",
+          "when": "view == f5xc.explorer && viewItem =~ /^resource:/",
+          "group": "6_export@2"
+        },
+        {
+          "command": "f5xc.exportAllJson",
+          "when": "view == f5xc.explorer && viewItem =~ /^resourceType:/",
+          "group": "6_export@1"
+        },
+        {
+          "command": "f5xc.exportAllYaml",
+          "when": "view == f5xc.explorer && viewItem =~ /^resourceType:/",
+          "group": "6_export@2"
+        },
+        {
           "command": "f5xc.showPlan",
           "when": "view == f5xc.subscription && viewItem == subscriptionPlan",
           "group": "inline"
@@ -595,6 +663,28 @@
           "command": "f5xc.showQuotas",
           "when": "view == f5xc.subscription && viewItem == subscriptionQuotas",
           "group": "inline"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "f5xc.fileApply",
+          "when": "resourceExtname == .json || resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "f5xc@1"
+        },
+        {
+          "command": "f5xc.fileCreate",
+          "when": "resourceExtname == .json || resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "f5xc@2"
+        },
+        {
+          "command": "f5xc.fileDiff",
+          "when": "resourceExtname == .json || resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "f5xc@3"
+        },
+        {
+          "command": "f5xc.fileDelete",
+          "when": "resourceExtname == .json || resourceExtname == .yaml || resourceExtname == .yml",
+          "group": "f5xc@4"
         }
       ],
       "editor/title": [
@@ -607,6 +697,16 @@
           "command": "f5xc.diff",
           "when": "resourceExtname == .f5xc.json || resourceFilename =~ /.*\\.(http_loadbalancer|origin_pool|app_firewall)\\.json$/",
           "group": "navigation"
+        },
+        {
+          "command": "f5xc.fileApply",
+          "when": "f5xc.isManifestFile",
+          "group": "f5xc@1"
+        },
+        {
+          "command": "f5xc.fileDiff",
+          "when": "f5xc.isManifestFile",
+          "group": "f5xc@2"
         }
       ],
       "commandPalette": [
