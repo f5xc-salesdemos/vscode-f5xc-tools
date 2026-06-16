@@ -142,7 +142,7 @@ export const mockExtensionContext = {
 
 // Mock window
 export const window = {
-  showInformationMessage: jest.fn(),
+  showInformationMessage: jest.fn().mockResolvedValue(undefined),
   showWarningMessage: jest.fn(),
   showErrorMessage: jest.fn(),
   showInputBox: jest.fn(),
@@ -206,6 +206,17 @@ export const commands = {
   executeCommand: jest.fn(),
   getCommands: jest.fn(),
 };
+
+// Mock extensions
+export const extensions = {
+  getExtension: jest.fn().mockReturnValue(undefined),
+};
+
+// Mock ExtensionKind
+export enum ExtensionKind {
+  UI = 1,
+  Workspace = 2,
+}
 
 // Mock env
 export const env = {
