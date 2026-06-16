@@ -162,6 +162,5 @@ function buildHoverContent(
   }
 
   const md = new vscode.MarkdownString(lines.join('\n'));
-  md.isTrusted = true;
   return md;
 }
