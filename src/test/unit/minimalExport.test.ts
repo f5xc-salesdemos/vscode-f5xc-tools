@@ -6,7 +6,6 @@ import {
   getMinimumConfigFields,
   getServerDefaultFields,
 } from '../../api/resourceTypes';
-import { buildMinimalExportFilter } from '../../services/resourceService';
 
 jest.mock('vscode', () => ({
   window: {
@@ -75,70 +74,14 @@ describe('metadata coverage for target resources', () => {
   }
 });
 
-describe('buildMinimalExportFilter for target resources', () => {
-  for (const kind of TARGET_RESOURCES) {
-    describe(kind, () => {
-      it('returns a filter object (not undefined)', () => {
-        const filter = buildMinimalExportFilter(kind);
-        // Some resource types have zero serverDefaultFields but still have conflicts
-        // The filter is built when serverDefaultFields > 0
-        const sd = getServerDefaultFields(kind);
-        if (sd.length > 0) {
-          expect(filter).toBeDefined();
-          expect(filter!.serverDefaults).toBeDefined();
-          expect(filter!.serverDefaultFields).toBeDefined();
-        }
-        // If no serverDefaultFields, filter may be undefined — that's correct behavior
-      });
-
-      it('filter serverDefaults paths do not have spec. prefix', () => {
-        const filter = buildMinimalExportFilter(kind);
-        if (!filter) {
-          return;
-        }
-        for (const key of Object.keys(filter.serverDefaults ?? {})) {
-          expect(key).not.toMatch(/^spec\./);
-        }
-        for (const field of filter.serverDefaultFields ?? []) {
-          expect(field).not.toMatch(/^spec\./);
-        }
-      });
-
-      it('filter minimumConfigFields paths do not have spec. prefix', () => {
-        const filter = buildMinimalExportFilter(kind);
-        if (!filter) {
-          return;
-        }
-        for (const field of filter.minimumConfigFields ?? []) {
-          expect(field).not.toMatch(/^spec\./);
-        }
-      });
-
-      it('filter oneofDefaultVariants only contains fields that exist in serverDefaults or serverDefaultFields', () => {
-        const filter = buildMinimalExportFilter(kind);
-        if (!filter) {
-          return;
-        }
-        for (const key of Object.keys(filter.oneofDefaultVariants ?? {})) {
-          expect(typeof key).toBe('string');
-          expect(key.length).toBeGreaterThan(0);
-        }
-      });
-    });
-  }
-});
+// buildMinimalExportFilter now lives in @f5xc-salesdemos/pi-resource-management and is
+// covered by that package's own test suite (build-minimal-filter.test.ts). vscode only
+// verifies the local field-metadata helpers that its non-export UI still relies on.
 
 describe('specific resource type assertions', () => {
   it('app_firewall has 7 serverDefaultFields', () => {
     const sd = getServerDefaultFields('app_firewall');
     expect(sd.length).toBe(7);
-  });
-
-  it('app_firewall filter strips known defaults', () => {
-    const filter = buildMinimalExportFilter('app_firewall');
-    expect(filter).toBeDefined();
-    const allKeys = [...Object.keys(filter!.serverDefaults ?? {}), ...(filter!.serverDefaultFields ?? [])];
-    expect(allKeys.length).toBeGreaterThanOrEqual(7);
   });
 
   it('app_firewall has 2 minimumConfigFields', () => {
