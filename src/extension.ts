@@ -1,6 +1,5 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-import * as fs from 'node:fs';
 import * as vscode from 'vscode';
 import { registerCloudStatusCommands } from './commands/cloudStatus';
 import { registerContextCommands } from './commands/context';
@@ -11,17 +10,17 @@ import { registerFileOperationCommands } from './commands/fileOperations';
 import { registerObservabilityCommands } from './commands/observability';
 import { ContextManager } from './config/contextManager';
 import { migrateProfilesToContexts } from './config/contextMigration';
-import { getLocalContextsDir } from './config/contextPaths';
+import { migrateSettings } from './config/settingsMigration';
 import { CloudStatusDashboardProvider } from './providers/cloudStatusDashboardProvider';
-import { F5XCCodeActionProvider } from './providers/f5xcCodeActionProvider';
-import { F5XCCompletionProvider } from './providers/f5xcCompletionProvider';
-import { registerConflictDiagnostics } from './providers/f5xcConflictDiagnosticProvider';
-import { F5XCDescribeProvider } from './providers/f5xcDescribeProvider';
-import { F5XCFileSystemProvider } from './providers/f5xcFileSystemProvider';
-import { F5XCHoverProvider } from './providers/f5xcHoverProvider';
+import { XCShCodeActionProvider } from './providers/xcshCodeActionProvider';
+import { XCShCompletionProvider } from './providers/xcshCompletionProvider';
+import { registerConflictDiagnostics } from './providers/xcshConflictDiagnosticProvider';
+import { XCShDescribeProvider } from './providers/xcshDescribeProvider';
+import { XCShFileSystemProvider } from './providers/xcshFileSystemProvider';
+import { XCShHoverProvider } from './providers/xcshHoverProvider';
 
-import { F5XCSchemaProvider } from './providers/f5xcSchemaProvider';
-import { F5XCViewProvider } from './providers/f5xcViewProvider';
+import { XCShSchemaProvider } from './providers/xcshSchemaProvider';
+import { XCShViewProvider } from './providers/xcshViewProvider';
 import { HealthcheckFormProvider } from './providers/healthcheckFormProvider';
 import { OnboardingProvider } from './providers/onboardingProvider';
 import { SubscriptionDashboardProvider } from './providers/subscriptionDashboardProvider';
@@ -29,7 +28,7 @@ import { registerYamlSchemaContributor } from './providers/yamlSchemaContributor
 import { getSchemaRegistry } from './schema/schemaRegistry';
 import { CloudStatusProvider } from './tree/cloudStatusProvider';
 import { ContextProvider } from './tree/contextProvider';
-import { F5XCExplorerProvider } from './tree/f5xcExplorer';
+import { XCShExplorerProvider } from './tree/xcshExplorer';
 import { SubscriptionProvider } from './tree/subscriptionProvider';
 import { getLogger, type Logger } from './utils/logger';
 import { ManifestDetector } from './utils/manifestDetector';
@@ -40,6 +39,9 @@ let logger: Logger;
 export function activate(context: vscode.ExtensionContext): void {
   logger = getLogger();
   logger.info('xcsh extension is activating...');
+
+  // Run one-time settings migration (f5xc.* → xcsh.* namespace)
+  void migrateSettings(context);
 
   // Run one-time profile-to-context migration
   const migrationResult = migrateProfilesToContexts();
@@ -52,28 +54,14 @@ export function activate(context: vscode.ExtensionContext): void {
   contextManager.initFileWatcher();
   context.subscriptions.push(contextManager);
 
-  // Set workspace folder for local context resolution
-  const wsFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-
   // Client factory for creating API clients
   const clientFactory = (ctx: { apiUrl: string; name: string }) => {
     return contextManager.getClient(ctx.name);
   };
 
   // Initialize tree view providers
-  const explorerProvider = new F5XCExplorerProvider(contextManager, clientFactory);
+  const explorerProvider = new XCShExplorerProvider(contextManager, clientFactory);
   const contextProvider = new ContextProvider(contextManager);
-
-  // Configure local context support when a workspace is open
-  if (wsFolder) {
-    contextProvider.setWorkspaceFolder(wsFolder);
-    contextManager.initFileWatcher(wsFolder); // watch local contexts too
-  }
-
-  // Set context variable for local-context view visibility
-  const localCtxDir = wsFolder ? getLocalContextsDir(wsFolder) : undefined;
-  const hasLocal = localCtxDir ? fs.existsSync(localCtxDir) : false;
-  void vscode.commands.executeCommand('setContext', 'f5xc.hasLocalContext', hasLocal);
   const cloudStatusProvider = new CloudStatusProvider();
   const subscriptionProvider = new SubscriptionProvider(contextManager);
   const cloudStatusDashboardProvider = new CloudStatusDashboardProvider(contextManager);
@@ -81,33 +69,33 @@ export function activate(context: vscode.ExtensionContext): void {
   // Set context for active context to control view visibility
   const updateHasActiveContext = async () => {
     const hasActive = (await contextManager.getActiveContext()) !== null;
-    void vscode.commands.executeCommand('setContext', 'f5xc.hasActiveContext', hasActive);
+    void vscode.commands.executeCommand('setContext', 'xcsh.hasActiveContext', hasActive);
   };
   void updateHasActiveContext();
 
   // Initialize F5 XC file system provider for editing resources
-  const fsProvider = new F5XCFileSystemProvider(contextManager, () => {
+  const fsProvider = new XCShFileSystemProvider(contextManager, () => {
     explorerProvider.refresh();
   });
 
   // Register the file system provider for editing resources
   context.subscriptions.push(
-    vscode.workspace.registerFileSystemProvider('f5xc', fsProvider, {
+    vscode.workspace.registerFileSystemProvider('xcsh', fsProvider, {
       isCaseSensitive: true,
       isReadonly: false,
     }),
   );
 
   // Initialize and register the view provider for read-only resource viewing
-  const viewProvider = new F5XCViewProvider(contextManager);
-  context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('f5xc-view', viewProvider));
+  const viewProvider = new XCShViewProvider(contextManager);
+  context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('xcsh-view', viewProvider));
 
   // Initialize the describe provider for formatted resource descriptions
-  const describeProvider = new F5XCDescribeProvider(contextManager);
+  const describeProvider = new XCShDescribeProvider(contextManager);
 
   // Initialize and register the schema provider for JSON IntelliSense
-  const schemaProvider = new F5XCSchemaProvider();
-  context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('f5xc-schema', schemaProvider));
+  const schemaProvider = new XCShSchemaProvider();
+  context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('xcsh-schema', schemaProvider));
   logger.debug('Schema provider registered');
 
   // Pre-warm schema cache for commonly used resource types
@@ -121,16 +109,16 @@ export function activate(context: vscode.ExtensionContext): void {
     logger.info('Registering completion providers');
 
     // Document selectors for F5 XC JSON files
-    const f5xcDocumentSelector: vscode.DocumentSelector = [
-      { scheme: 'f5xc', language: 'json' }, // f5xc:// scheme (editing resources)
+    const xcshDocumentSelector: vscode.DocumentSelector = [
+      { scheme: 'xcsh', language: 'json' }, // xcsh:// scheme (editing resources)
       { scheme: 'file', language: 'json' }, // All JSON files
     ];
 
     // Register multi-line completion provider (dropdown completions)
-    const completionProvider = new F5XCCompletionProvider();
+    const completionProvider = new XCShCompletionProvider();
     context.subscriptions.push(
       vscode.languages.registerCompletionItemProvider(
-        f5xcDocumentSelector,
+        xcshDocumentSelector,
         completionProvider,
         '"', // Trigger on quote
         '{', // Trigger on opening brace
@@ -139,13 +127,13 @@ export function activate(context: vscode.ExtensionContext): void {
     );
 
     // Register hover provider (field documentation on hover)
-    const hoverProvider = new F5XCHoverProvider();
-    context.subscriptions.push(vscode.languages.registerHoverProvider(f5xcDocumentSelector, hoverProvider));
+    const hoverProvider = new XCShHoverProvider();
+    context.subscriptions.push(vscode.languages.registerHoverProvider(xcshDocumentSelector, hoverProvider));
 
     // Register code action provider (quick fixes for conflicts)
     context.subscriptions.push(
-      vscode.languages.registerCodeActionsProvider(f5xcDocumentSelector, new F5XCCodeActionProvider(), {
-        providedCodeActionKinds: F5XCCodeActionProvider.providedCodeActionKinds,
+      vscode.languages.registerCodeActionsProvider(xcshDocumentSelector, new XCShCodeActionProvider(), {
+        providedCodeActionKinds: XCShCodeActionProvider.providedCodeActionKinds,
       }),
     );
 
@@ -161,9 +149,9 @@ export function activate(context: vscode.ExtensionContext): void {
   // Initialize the subscription dashboard provider for Plan and Quotas views
   const subscriptionDashboardProvider = new SubscriptionDashboardProvider(contextManager);
 
-  // Register subscription commands (f5xc.showPlan, f5xc.showQuotas)
+  // Register subscription commands (xcsh.showPlan, xcsh.showQuotas)
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.showPlan', async (contextName?: string) => {
+    vscode.commands.registerCommand('xcsh.showPlan', async (contextName?: string) => {
       const activeContext = await contextManager.getActiveContext();
       const name = contextName || activeContext?.name;
       if (name) {
@@ -175,7 +163,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.showQuotas', async (contextName?: string) => {
+    vscode.commands.registerCommand('xcsh.showQuotas', async (contextName?: string) => {
       const activeContext = await contextManager.getActiveContext();
       const name = contextName || activeContext?.name;
       if (name) {
@@ -188,7 +176,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register addon activation command (for programmatic access)
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.activateAddon', async (addonName: string, contextName?: string) => {
+    vscode.commands.registerCommand('xcsh.activateAddon', async (addonName: string, contextName?: string) => {
       const activeContext = await contextManager.getActiveContext();
       const name = contextName || activeContext?.name;
       if (!name) {
@@ -208,25 +196,25 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   // Register tree views
-  const explorerView = vscode.window.createTreeView('f5xc.explorer', {
+  const explorerView = vscode.window.createTreeView('xcsh.explorer', {
     treeDataProvider: explorerProvider,
     showCollapseAll: true,
     canSelectMany: false,
   });
 
-  const contextsView = vscode.window.createTreeView('f5xc.profiles', {
+  const contextsView = vscode.window.createTreeView('xcsh.profiles', {
     treeDataProvider: contextProvider,
     showCollapseAll: false,
     canSelectMany: false,
   });
 
-  const cloudStatusView = vscode.window.createTreeView('f5xc.cloudStatus', {
+  const cloudStatusView = vscode.window.createTreeView('xcsh.cloudStatus', {
     treeDataProvider: cloudStatusProvider,
     showCollapseAll: true,
     canSelectMany: false,
   });
 
-  const subscriptionView = vscode.window.createTreeView('f5xc.subscription', {
+  const subscriptionView = vscode.window.createTreeView('xcsh.subscription', {
     treeDataProvider: subscriptionProvider,
     showCollapseAll: false,
     canSelectMany: false,
@@ -234,7 +222,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Register refresh command
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.refresh', () => {
+    vscode.commands.registerCommand('xcsh.refresh', () => {
       explorerProvider.refresh();
       logger.info('Explorer refreshed');
     }),
@@ -268,7 +256,7 @@ export function activate(context: vscode.ExtensionContext): void {
   // Register healthcheck form provider
   const healthcheckFormProvider = new HealthcheckFormProvider(contextManager, explorerProvider, describeProvider);
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.createHealthcheckForm', async (arg?: unknown) => {
+    vscode.commands.registerCommand('xcsh.createHealthcheckForm', async (arg?: unknown) => {
       // Extract namespace from context if available
       let namespace: string | undefined;
       if (arg && typeof arg === 'object' && 'getData' in arg) {
@@ -282,7 +270,7 @@ export function activate(context: vscode.ExtensionContext): void {
   // Register onboarding / platform readiness panel
   const onboardingProvider = new OnboardingProvider(contextManager);
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.showOnboarding', async () => {
+    vscode.commands.registerCommand('xcsh.showOnboarding', async () => {
       await onboardingProvider.showPanel();
       void context.globalState.update('onboarding.shown', true);
     }),
@@ -301,11 +289,11 @@ export function activate(context: vscode.ExtensionContext): void {
     },
   );
 
-  // Configure JSON schema associations for f5xc:// documents
+  // Configure JSON schema associations for xcsh:// documents
   // This ensures IntelliSense works when editing F5 XC resources
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((document) => {
-      if (document.uri.scheme === 'f5xc' && document.uri.path.endsWith('.json')) {
+      if (document.uri.scheme === 'xcsh' && document.uri.path.endsWith('.json')) {
         // Ensure the document is treated as JSON
         void vscode.languages.setTextDocumentLanguage(document, 'json');
       }
@@ -319,12 +307,12 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(subscriptionView);
 
   // Ensure the Resources view is the default focused view on initial activation
-  vscode.commands.executeCommand('f5xc.explorer.focus').then(
+  vscode.commands.executeCommand('xcsh.explorer.focus').then(
     () => {
-      logger.debug('Focused Resources view (f5xc.explorer) as default');
+      logger.debug('Focused Resources view (xcsh.explorer) as default');
     },
     (error) => {
-      logger.warn('Failed to focus Resources view (f5xc.explorer)', error as Error);
+      logger.warn('Failed to focus Resources view (xcsh.explorer)', error as Error);
     },
   );
 

@@ -84,20 +84,20 @@ jest.mock('../../xcsh/specBridge', () => ({
   getKindResolver: jest.fn().mockReturnValue(mockKindResolver),
 }));
 
-// Mock F5XCApiError
+// Mock XCShApiError
 jest.mock('../../utils/errors', () => {
-  class F5XCApiError extends Error {
+  class XCShApiError extends Error {
     public readonly statusCode: number;
     public readonly body: string;
     constructor(statusCode: number, body: string) {
       super(`API Error ${statusCode}: ${body}`);
-      this.name = 'F5XCApiError';
+      this.name = 'XCShApiError';
       this.statusCode = statusCode;
       this.body = body;
     }
   }
   return {
-    F5XCApiError,
+    XCShApiError,
     showError: jest.fn(),
     showWarning: jest.fn(),
     showInfo: jest.fn(),

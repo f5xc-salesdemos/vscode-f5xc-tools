@@ -21,7 +21,7 @@ import {
 import { geocodeLocation } from '../api/geocoder';
 import { type Coordinates, formatCoordinates, getPopCoordinates } from '../api/popCoordinates';
 import type { ContextManager } from '../config/contextManager';
-import { getToolbarIconSvg } from '../utils/f5xcIcons';
+import { getToolbarIconSvg } from '../utils/xcshIcons';
 import { getLogger } from '../utils/logger';
 import { escapeHtml, getNonce, getWebviewBaseStyles } from '../utils/panelBaseStyles';
 

@@ -16,8 +16,8 @@ describe('ContextManager', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'f5xc-ctx-test-'));
-    configDir = path.join(tmpDir, 'f5xc');
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'xcsh-ctx-test-'));
+    configDir = path.join(tmpDir, 'xcsh');
     contextsDir = path.join(configDir, 'contexts');
     process.env = { ...originalEnv, XDG_CONFIG_HOME: tmpDir };
 
@@ -243,7 +243,7 @@ describe('ContextManager', () => {
   // --------------- getClient ---------------
 
   it('getClient returns the same cached instance on repeated calls', async () => {
-    // TokenAuthProvider and F5XCClient constructors do not make network calls,
+    // TokenAuthProvider and XCShClient constructors do not make network calls,
     // so no https stubbing is needed — only getClient caching behaviour is tested.
     const mgr = new ContextManager();
     await mgr.addContext(makeContext({ name: 'test-ctx' }));

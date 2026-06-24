@@ -4,7 +4,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { TokenAuthProvider } from '../api/auth/tokenAuth';
-import { F5XCClient } from '../api/client';
+import { XCShClient } from '../api/client';
 import { getLogger } from '../utils/logger';
 import {
   DIR_MODE,
@@ -28,16 +28,16 @@ import {
 } from './contextTypes';
 
 /**
- * Manages F5 XC context files stored in ~/.config/f5xc/contexts/.
+ * Manages F5 XC context files stored in ~/.config/xcsh/contexts/.
  *
  * Implements atomic writes (write-to-tmp then rename), 0o600 file
- * permissions, and caches F5XCClient / TokenAuthProvider instances
+ * permissions, and caches XCShClient / TokenAuthProvider instances
  * per context.  A file-system watcher fires `onDidChangeContext`
  * when contexts are modified externally (e.g., by xcsh).
  */
 export class ContextManager implements ContextManagerInterface, vscode.Disposable {
   private readonly logger = getLogger();
-  private readonly clientCache = new Map<string, F5XCClient>();
+  private readonly clientCache = new Map<string, XCShClient>();
   private readonly authCache = new Map<string, TokenAuthProvider>();
 
   private readonly _onDidChangeContext = new vscode.EventEmitter<void>();
@@ -421,7 +421,7 @@ export class ContextManager implements ContextManagerInterface, vscode.Disposabl
 
   // ───────── client factory ─────────
 
-  async getClient(contextName: string): Promise<F5XCClient> {
+  async getClient(contextName: string): Promise<XCShClient> {
     const cached = this.clientCache.get(contextName);
     if (cached) {
       return cached;
@@ -436,7 +436,7 @@ export class ContextManager implements ContextManagerInterface, vscode.Disposabl
       apiUrl: ctx.apiUrl,
       apiToken: ctx.apiToken,
     });
-    const client = new F5XCClient(ctx.apiUrl, authProvider);
+    const client = new XCShClient(ctx.apiUrl, authProvider);
 
     this.authCache.set(contextName, authProvider);
     this.clientCache.set(contextName, client);

@@ -370,7 +370,7 @@ export function generateSchemaForResourceType(resourceTypeKey: string): F5XCJson
 
   const schema: F5XCJsonSchema = {
     $schema: 'http://json-schema.org/draft-07/schema#',
-    $id: `f5xc-schema://schemas/${resourceTypeKey}.json`,
+    $id: `xcsh-schema://schemas/${resourceTypeKey}.json`,
     title: `xcsh ${resourceType.displayName}`,
     description: resourceType.description,
     type: 'object',
@@ -390,7 +390,7 @@ export function generateSchemaForResourceType(resourceTypeKey: string): F5XCJson
 export function generateGenericSchema(): F5XCJsonSchema {
   return {
     $schema: 'http://json-schema.org/draft-07/schema#',
-    $id: 'f5xc-schema://schemas/generic.json',
+    $id: 'xcsh-schema://schemas/generic.json',
     title: 'xcsh Resource',
     description: 'Generic schema for xcsh resources',
     type: 'object',

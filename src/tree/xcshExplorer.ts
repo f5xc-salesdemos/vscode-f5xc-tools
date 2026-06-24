@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
 import * as vscode from 'vscode';
-import { F5XCClient } from '../api/client';
+import { XCShClient } from '../api/client';
 import {
   BUILT_IN_NAMESPACES,
   getCategorizedResourceTypesForNamespace,
@@ -42,15 +42,15 @@ import {
 /**
  * Tree data provider for the F5 XC Explorer view
  */
-export class F5XCExplorerProvider implements vscode.TreeDataProvider<F5XCTreeItem> {
+export class XCShExplorerProvider implements vscode.TreeDataProvider<F5XCTreeItem> {
   private readonly _onDidChangeTreeData = new vscode.EventEmitter<F5XCTreeItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   private readonly contextManager: ContextManager;
-  private readonly clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>;
+  private readonly clientFactory: (ctx: F5XCContext) => Promise<XCShClient>;
   private readonly logger = getLogger();
 
-  constructor(contextManager: ContextManager, clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>) {
+  constructor(contextManager: ContextManager, clientFactory: (ctx: F5XCContext) => Promise<XCShClient>) {
     this.contextManager = contextManager;
     this.clientFactory = clientFactory;
   }
@@ -166,7 +166,7 @@ class NamespaceGroupNode implements F5XCTreeItem {
     private readonly groupName: string,
     private readonly namespaceNames: string[],
     private readonly profileName: string,
-    private readonly clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>,
+    private readonly clientFactory: (ctx: F5XCContext) => Promise<XCShClient>,
     private readonly contextManager: ContextManager,
     private readonly icon: string,
     private readonly isBuiltIn: boolean,
@@ -200,7 +200,7 @@ class NamespaceGroupNode implements F5XCTreeItem {
 export class NamespaceNode implements F5XCTreeItem {
   constructor(
     private readonly data: NamespaceNodeData,
-    private readonly clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>,
+    private readonly clientFactory: (ctx: F5XCContext) => Promise<XCShClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -249,7 +249,7 @@ export class NamespaceNode implements F5XCTreeItem {
 class CategoryNode implements F5XCTreeItem {
   constructor(
     private readonly data: CategoryNodeData,
-    private readonly clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>,
+    private readonly clientFactory: (ctx: F5XCContext) => Promise<XCShClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -317,7 +317,7 @@ class ResourceTypeNode implements F5XCTreeItem {
 
   constructor(
     private readonly data: ResourceTypeNodeData,
-    private readonly clientFactory: (ctx: F5XCContext) => Promise<F5XCClient>,
+    private readonly clientFactory: (ctx: F5XCContext) => Promise<XCShClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -443,7 +443,7 @@ class ResourceTypeNode implements F5XCTreeItem {
       }
 
       const client = await this.clientFactory(ctx);
-      const listOptions = F5XCClient.buildListOptions(this.data.resourceType);
+      const listOptions = XCShClient.buildListOptions(this.data.resourceType);
       const resources = await client.listWithOptions(this.data.namespace, this.data.resourceType.apiPath, listOptions);
 
       return (
@@ -586,7 +586,7 @@ export class ResourceNode implements F5XCTreeItem {
 
     item.tooltip = tooltip;
     item.command = {
-      command: 'f5xc.describe',
+      command: 'xcsh.describe',
       title: 'Describe Resource',
       arguments: [this],
     };
@@ -629,7 +629,7 @@ class ErrorNode implements F5XCTreeItem {
   constructor(
     private readonly title: string,
     private readonly message: string,
-    private readonly retryCommand: string = 'f5xc.refreshExplorer',
+    private readonly retryCommand: string = 'xcsh.refreshExplorer',
   ) {}
 
   getTreeItem(): vscode.TreeItem {

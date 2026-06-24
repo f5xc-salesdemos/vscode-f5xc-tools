@@ -17,7 +17,7 @@ import {
   type QuotaUsage,
 } from '../api/subscription';
 import type { ContextManager } from '../config/contextManager';
-import { getToolbarIconSvg } from '../utils/f5xcIcons';
+import { getToolbarIconSvg } from '../utils/xcshIcons';
 import { getLogger } from '../utils/logger';
 import { escapeHtml, getNonce, getWebviewBaseStyles } from '../utils/panelBaseStyles';
 
@@ -54,7 +54,7 @@ export class SubscriptionDashboardProvider {
         this.planPanel.reveal(vscode.ViewColumn.Beside);
       } else {
         this.planPanel = vscode.window.createWebviewPanel(
-          'f5xcPlanDashboard',
+          'xcshPlanDashboard',
           vscode.l10n.t('Subscription Plan'),
           vscode.ViewColumn.Beside,
           {
@@ -106,7 +106,7 @@ export class SubscriptionDashboardProvider {
         this.quotasPanel.reveal(vscode.ViewColumn.Beside);
       } else {
         this.quotasPanel = vscode.window.createWebviewPanel(
-          'f5xcQuotasDashboard',
+          'xcshQuotasDashboard',
           vscode.l10n.t('Quota Usage'),
           vscode.ViewColumn.Beside,
           {

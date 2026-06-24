@@ -34,7 +34,7 @@ module.exports = {
     '!src/test/**',
     '!src/extension.ts',
     '!src/generated/**',
-    '!src/providers/f5xcDiagramProvider.ts',
+    '!src/providers/xcshDiagramProvider.ts',
     '!src/providers/subscriptionDashboardProvider.ts',
     '!src/commands/diagram.ts',
     '!src/api/subscription.ts',

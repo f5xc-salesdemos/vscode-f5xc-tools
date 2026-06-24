@@ -20,7 +20,7 @@ function createMockDocument(options: {
   const uri = options.uri ?? {
     scheme,
     fsPath: filename,
-    path: scheme === 'f5xc' ? filename : filename,
+    path: scheme === 'xcsh' ? filename : filename,
     toString: () => `${scheme}://${filename}`,
   };
 
@@ -65,11 +65,11 @@ describe('completionHelper', () => {
   });
 
   describe('detectResourceType', () => {
-    it('detects from f5xc:// scheme URI', () => {
-      // f5xc://profile/namespace/resourceType/resourceName.json
+    it('detects from xcsh:// scheme URI', () => {
+      // xcsh://profile/namespace/resourceType/resourceName.json
       // parts[1] is the namespace (second path component)
       const doc = createMockDocument({
-        scheme: 'f5xc',
+        scheme: 'xcsh',
         filename: '/profile/http_loadbalancer/my-lb.json',
       });
       const result = detectResourceType(doc);
@@ -151,8 +151,8 @@ describe('completionHelper', () => {
   });
 
   describe('isF5XCJsonFile', () => {
-    it('returns true for f5xc:// scheme', () => {
-      const doc = createMockDocument({ scheme: 'f5xc', languageId: 'json' });
+    it('returns true for xcsh:// scheme', () => {
+      const doc = createMockDocument({ scheme: 'xcsh', languageId: 'json' });
       expect(isF5XCJsonFile(doc)).toBe(true);
     });
 

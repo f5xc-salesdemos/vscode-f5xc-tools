@@ -26,17 +26,17 @@ export class SchemaRegistry {
 
   /**
    * Get the schema URI for a resource type.
-   * The URI uses the f5xc-schema:// scheme for VSCode's JSON language service.
+   * The URI uses the xcsh-schema:// scheme for VSCode's JSON language service.
    */
   getSchemaUri(resourceType: string): vscode.Uri {
-    return vscode.Uri.parse(`f5xc-schema://schemas/${resourceType}.json`);
+    return vscode.Uri.parse(`xcsh-schema://schemas/${resourceType}.json`);
   }
 
   /**
    * Get the generic schema URI for any F5 XC resource.
    */
   getGenericSchemaUri(): vscode.Uri {
-    return vscode.Uri.parse('f5xc-schema://schemas/generic.json');
+    return vscode.Uri.parse('xcsh-schema://schemas/generic.json');
   }
 
   /**

@@ -40,7 +40,7 @@ export class PlanNode implements F5XCTreeItem {
     item.iconPath = new vscode.ThemeIcon('file-text');
     item.tooltip = vscode.l10n.t('View subscription plan details and addon services');
     item.command = {
-      command: 'f5xc.showPlan',
+      command: 'xcsh.showPlan',
       title: 'Show Subscription Plan',
       arguments: [this.profileName],
     };
@@ -70,7 +70,7 @@ export class QuotasNode implements F5XCTreeItem {
     item.iconPath = new vscode.ThemeIcon('graph');
     item.tooltip = vscode.l10n.t('View resource quota usage and limits');
     item.command = {
-      command: 'f5xc.showQuotas',
+      command: 'xcsh.showQuotas',
       title: 'Show Quota Usage',
       arguments: [this.profileName],
     };

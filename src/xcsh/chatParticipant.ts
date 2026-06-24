@@ -6,7 +6,7 @@ import { getLogger } from '../utils/logger';
 import type { XcshRpcBridge } from './rpcBridge';
 import type { IntegrationsResponse, ToolExecutionEnd, ToolExecutionStart } from './types';
 
-const PARTICIPANT_ID = 'f5xc.xcsh';
+const PARTICIPANT_ID = 'xcsh.xcsh';
 
 interface FileContext {
   currentFile?: string;

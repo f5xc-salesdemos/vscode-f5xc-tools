@@ -32,7 +32,7 @@ export function findConflicts(specProperties: Record<string, unknown>, setFields
 }
 
 export function registerConflictDiagnostics(context: vscode.ExtensionContext): vscode.DiagnosticCollection {
-  const diagnosticCollection = vscode.languages.createDiagnosticCollection('f5xc-conflicts');
+  const diagnosticCollection = vscode.languages.createDiagnosticCollection('xcsh-conflicts');
   context.subscriptions.push(diagnosticCollection);
 
   const checkDocument = (document: vscode.TextDocument) => {

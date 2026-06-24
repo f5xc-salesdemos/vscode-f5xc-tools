@@ -7,7 +7,7 @@ import type { ContextManager } from '../config/contextManager';
 import type { F5XCContext } from '../config/contextTypes';
 import { isValidContextName } from '../config/contextTypes';
 import type { ContextProvider, ContextTreeItem } from '../tree/contextProvider';
-import type { F5XCExplorerProvider } from '../tree/f5xcExplorer';
+import type { XCShExplorerProvider } from '../tree/xcshExplorer';
 import { showInfo, showWarning, withErrorHandling } from '../utils/errors';
 
 /**
@@ -17,11 +17,11 @@ export function registerContextCommands(
   context: vscode.ExtensionContext,
   contextManager: ContextManager,
   contextProvider: ContextProvider,
-  explorerProvider: F5XCExplorerProvider,
+  explorerProvider: XCShExplorerProvider,
 ): void {
   // ADD CONTEXT
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.addContext', async () => {
+    vscode.commands.registerCommand('xcsh.addContext', async () => {
       await withErrorHandling(async () => {
         // Step 1: Context name
         const name = await vscode.window.showInputBox({
@@ -169,7 +169,7 @@ export function registerContextCommands(
 
   // EDIT CONTEXT
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.editContext', async (node?: ContextTreeItem) => {
+    vscode.commands.registerCommand('xcsh.editContext', async (node?: ContextTreeItem) => {
       await withErrorHandling(async () => {
         let contextName: string | undefined;
 
@@ -291,7 +291,7 @@ export function registerContextCommands(
 
   // DELETE CONTEXT
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.deleteContext', async (node?: ContextTreeItem) => {
+    vscode.commands.registerCommand('xcsh.deleteContext', async (node?: ContextTreeItem) => {
       await withErrorHandling(async () => {
         let contextName: string | undefined;
 
@@ -341,7 +341,7 @@ export function registerContextCommands(
 
   // SET ACTIVE CONTEXT
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.setActiveContext', async (node?: ContextTreeItem) => {
+    vscode.commands.registerCommand('xcsh.setActiveContext', async (node?: ContextTreeItem) => {
       await withErrorHandling(async () => {
         let contextName: string | undefined;
 
@@ -383,7 +383,7 @@ export function registerContextCommands(
 
   // CLEAR AUTH CACHE
   context.subscriptions.push(
-    vscode.commands.registerCommand('f5xc.clearAuthCache', async () => {
+    vscode.commands.registerCommand('xcsh.clearAuthCache', async () => {
       await withErrorHandling(() => {
         contextManager.clearAllCachesPublic();
         showInfo(vscode.l10n.t('Authentication cache cleared. Re-authentication will occur on next request.'));

@@ -227,7 +227,7 @@ export class ContextTreeItem implements F5XCTreeItem {
     // Click to activate context (only if not already active)
     if (!this.isActive) {
       item.command = {
-        command: 'f5xc.setActiveContext',
+        command: 'xcsh.setActiveContext',
         title: 'Set as Active Context',
         arguments: [this],
       };

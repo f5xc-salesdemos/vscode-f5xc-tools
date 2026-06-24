@@ -24,9 +24,9 @@ interface F5XCUri {
  * Virtual file system provider for F5 XC resources.
  * Allows editing resources with Cmd+S saving directly to F5 XC API.
  *
- * URI format: f5xc://profile/namespace/resourceType/resourceName.json
+ * URI format: xcsh://profile/namespace/resourceType/resourceName.json
  */
-export class F5XCFileSystemProvider implements vscode.FileSystemProvider {
+export class XCShFileSystemProvider implements vscode.FileSystemProvider {
   private readonly _onDidChangeFile = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
   readonly onDidChangeFile = this._onDidChangeFile.event;
 
@@ -45,14 +45,14 @@ export class F5XCFileSystemProvider implements vscode.FileSystemProvider {
    * Parse an F5 XC URI into its components
    */
   private parseUri(uri: vscode.Uri): F5XCUri {
-    // URI format: f5xc://profile/namespace/resourceType/resourceName.json
+    // URI format: xcsh://profile/namespace/resourceType/resourceName.json
     // The profile is in the authority, path contains namespace/resourceType/resourceName.json
     const profileName = uri.authority;
     const parts = uri.path.split('/').filter((p) => p.length > 0);
 
     if (!profileName || parts.length !== 3) {
       throw vscode.FileSystemError.FileNotFound(
-        `Invalid xcsh URI format: ${uri.toString()}. Expected: f5xc://profile/namespace/resourceType/resourceName.json`,
+        `Invalid xcsh URI format: ${uri.toString()}. Expected: xcsh://profile/namespace/resourceType/resourceName.json`,
       );
     }
 
@@ -68,7 +68,7 @@ export class F5XCFileSystemProvider implements vscode.FileSystemProvider {
    * Create an F5 XC URI from components
    */
   static createUri(profileName: string, namespace: string, resourceType: string, resourceName: string): vscode.Uri {
-    return vscode.Uri.parse(`f5xc://${profileName}/${namespace}/${resourceType}/${resourceName}.json`);
+    return vscode.Uri.parse(`xcsh://${profileName}/${namespace}/${resourceType}/${resourceName}.json`);
   }
 
   watch(): vscode.Disposable {

@@ -17,7 +17,7 @@ const logger = getLogger();
  * Provides inline ghost text completions for F5 XC JSON files.
  * Shows recommended/default values as greyed-out text after property colons.
  */
-export class F5XCInlineCompletionProvider implements vscode.InlineCompletionItemProvider {
+export class XCShInlineCompletionProvider implements vscode.InlineCompletionItemProvider {
   /**
    * Provide inline completion items (ghost text) for the current position
    */
