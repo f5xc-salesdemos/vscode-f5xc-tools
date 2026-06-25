@@ -7,10 +7,10 @@ import type { ContextManager } from '../config/contextManager';
 import { API_ENDPOINTS } from '../generated/constants';
 import { getDocumentationUrl as getGeneratedDocUrl } from '../generated/documentationUrls';
 import { GENERATED_RESOURCE_TYPES } from '../generated/resourceTypesBase';
-import { getIconForCategory, getToolbarIconSvg } from '../utils/xcshIcons';
 import { getLocalizedDisplayName } from '../utils/l10nHelpers';
 import { getLogger } from '../utils/logger';
 import { escapeHtml, getNonce, getWebviewBaseStyles } from '../utils/panelBaseStyles';
+import { getIconForCategory, getToolbarIconSvg } from '../utils/xcshIcons';
 import { renderBestPractices } from './metadataRenderer';
 
 const logger = getLogger();
@@ -48,7 +48,7 @@ interface SectionDefinition {
  * WebView provider for displaying F5 XC resource descriptions.
  * Matches the F5 XC Console UI layout with toolbar, sidebar, and organized sections.
  */
-export class XCShDescribeProvider {
+export class XCSHDescribeProvider {
   private panel: vscode.WebviewPanel | undefined;
 
   constructor(private readonly contextManager: ContextManager) {}

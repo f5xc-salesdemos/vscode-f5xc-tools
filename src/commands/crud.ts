@@ -16,11 +16,11 @@ import {
   requiresConfirmation,
 } from '../api/resourceTypes';
 import type { ContextManager } from '../config/contextManager';
-import type { XCShDescribeProvider } from '../providers/xcshDescribeProvider';
-import { XCShFileSystemProvider } from '../providers/xcshFileSystemProvider';
-import { XCShViewProvider } from '../providers/xcshViewProvider';
-import type { XCShExplorerProvider, NamespaceNode, ResourceNode } from '../tree/xcshExplorer';
+import type { XCSHDescribeProvider } from '../providers/xcshDescribeProvider';
+import { XCSHFileSystemProvider } from '../providers/xcshFileSystemProvider';
+import { XCSHViewProvider } from '../providers/xcshViewProvider';
 import type { ResourceNodeData } from '../tree/treeTypes';
+import type { NamespaceNode, ResourceNode, XCSHExplorerProvider } from '../tree/xcshExplorer';
 import { showInfo, showWarning, withErrorHandling } from '../utils/errors';
 import { getLocalizedDisplayName } from '../utils/l10nHelpers';
 import { getLogger } from '../utils/logger';
@@ -60,11 +60,11 @@ function getViewMode(): ViewMode {
  */
 export function registerCrudCommands(
   context: vscode.ExtensionContext,
-  explorer: XCShExplorerProvider,
+  explorer: XCSHExplorerProvider,
   contextManager: ContextManager,
-  fsProvider: XCShFileSystemProvider,
-  viewProvider: XCShViewProvider,
-  describeProvider: XCShDescribeProvider,
+  fsProvider: XCSHFileSystemProvider,
+  viewProvider: XCSHViewProvider,
+  describeProvider: XCSHDescribeProvider,
 ): void {
   // GET - View resource as JSON (read-only)
   context.subscriptions.push(
@@ -79,7 +79,7 @@ export function registerCrudCommands(
         }
 
         // Create xcsh-view:// URI for read-only viewing
-        const uri = XCShViewProvider.createUri(data.profileName, data.namespace, data.resourceType.apiPath, data.name);
+        const uri = XCSHViewProvider.createUri(data.profileName, data.namespace, data.resourceType.apiPath, data.name);
 
         // Refresh the content to ensure fresh data
         viewProvider.refresh(uri);
@@ -158,7 +158,7 @@ export function registerCrudCommands(
         }
 
         // Create xcsh:// URI for the resource
-        const uri = XCShFileSystemProvider.createUri(data.profileName, data.namespace, data.resourceTypeKey, data.name);
+        const uri = XCSHFileSystemProvider.createUri(data.profileName, data.namespace, data.resourceTypeKey, data.name);
 
         // Clear any cached content to ensure fresh data
         fsProvider.clearCache(uri);

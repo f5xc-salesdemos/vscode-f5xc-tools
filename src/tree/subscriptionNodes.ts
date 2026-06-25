@@ -5,13 +5,13 @@
  */
 
 import * as vscode from 'vscode';
-import { type XCShTreeItem, TreeItemContext } from './treeTypes';
+import { TreeItemContext, type XCSHTreeItem } from './treeTypes';
 
 /**
  * Top-level Subscription group node
  * Contains Plan and Quotas sub-nodes
  */
-export class SubscriptionGroupNode implements XCShTreeItem {
+export class SubscriptionGroupNode implements XCSHTreeItem {
   constructor(private readonly profileName: string) {}
 
   getTreeItem(): vscode.TreeItem {
@@ -22,7 +22,7 @@ export class SubscriptionGroupNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     return Promise.resolve([new PlanNode(this.profileName), new QuotasNode(this.profileName)]);
   }
 }
@@ -31,7 +31,7 @@ export class SubscriptionGroupNode implements XCShTreeItem {
  * Plan node - displays current subscription tier and addons
  * Opens Plan dashboard webview on click
  */
-export class PlanNode implements XCShTreeItem {
+export class PlanNode implements XCSHTreeItem {
   constructor(private readonly profileName: string) {}
 
   getTreeItem(): vscode.TreeItem {
@@ -47,7 +47,7 @@ export class PlanNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     // Leaf node - no children
     return Promise.resolve([]);
   }
@@ -61,7 +61,7 @@ export class PlanNode implements XCShTreeItem {
  * Quotas node - displays resource usage vs limits
  * Opens Quotas dashboard webview on click
  */
-export class QuotasNode implements XCShTreeItem {
+export class QuotasNode implements XCSHTreeItem {
   constructor(private readonly profileName: string) {}
 
   getTreeItem(): vscode.TreeItem {
@@ -77,7 +77,7 @@ export class QuotasNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     // Leaf node - no children
     return Promise.resolve([]);
   }

@@ -5,7 +5,7 @@
  */
 
 import type * as vscode from 'vscode';
-import { XCShSchemaProvider, getSchemaUriForDocument } from '../../providers/xcshSchemaProvider';
+import { getSchemaUriForDocument, XCSHSchemaProvider } from '../../providers/xcshSchemaProvider';
 import { resetSchemaRegistry } from '../../schema/schemaRegistry';
 
 // Mock vscode module
@@ -48,18 +48,18 @@ jest.mock(
   { virtual: true },
 );
 
-describe('XCShSchemaProvider', () => {
-  let provider: XCShSchemaProvider;
+describe('XCSHSchemaProvider', () => {
+  let provider: XCSHSchemaProvider;
 
   beforeEach(() => {
     resetSchemaRegistry();
-    provider = new XCShSchemaProvider();
+    provider = new XCSHSchemaProvider();
     jest.clearAllMocks();
   });
 
   describe('constructor', () => {
     it('should create instance with event emitter', () => {
-      expect(provider).toBeInstanceOf(XCShSchemaProvider);
+      expect(provider).toBeInstanceOf(XCSHSchemaProvider);
       expect(provider.onDidChange).toBeDefined();
     });
   });
@@ -305,11 +305,11 @@ describe('getSchemaUriForDocument', () => {
 });
 
 describe('Schema Provider Integration', () => {
-  let provider: XCShSchemaProvider;
+  let provider: XCSHSchemaProvider;
 
   beforeEach(() => {
     resetSchemaRegistry();
-    provider = new XCShSchemaProvider();
+    provider = new XCSHSchemaProvider();
   });
 
   describe('consistency between calls', () => {

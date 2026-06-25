@@ -4,10 +4,10 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import type { ContextManager } from '../config/contextManager';
-import type { XCShContext } from '../config/contextTypes';
+import type { XCSHContext } from '../config/contextTypes';
 import { isValidContextName } from '../config/contextTypes';
 import type { ContextProvider, ContextTreeItem } from '../tree/contextProvider';
-import type { XCShExplorerProvider } from '../tree/xcshExplorer';
+import type { XCSHExplorerProvider } from '../tree/xcshExplorer';
 import { showInfo, showWarning, withErrorHandling } from '../utils/errors';
 
 /**
@@ -17,7 +17,7 @@ export function registerContextCommands(
   context: vscode.ExtensionContext,
   contextManager: ContextManager,
   contextProvider: ContextProvider,
-  explorerProvider: XCShExplorerProvider,
+  explorerProvider: XCSHExplorerProvider,
 ): void {
   // ADD CONTEXT
   context.subscriptions.push(
@@ -99,7 +99,7 @@ export function registerContextCommands(
         }
 
         // Build context
-        const newContext: XCShContext = {
+        const newContext: XCSHContext = {
           name,
           apiUrl,
           apiToken,
@@ -223,7 +223,7 @@ export function registerContextCommands(
           return;
         }
 
-        const updates: Partial<XCShContext> = {};
+        const updates: Partial<XCSHContext> = {};
 
         switch (editOption.label) {
           case vscode.l10n.t('API URL'): {

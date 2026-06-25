@@ -75,7 +75,7 @@ jest.mock('../../services/resourceService', () => ({
 }));
 
 jest.mock('../../utils/errors', () => ({
-  XCShApiError: class extends Error {
+  XCSHApiError: class extends Error {
     statusCode: number;
     body: string;
     constructor(statusCode: number, body: string) {
@@ -114,7 +114,7 @@ jest.mock('../../utils/manifestDetector', () => ({
 import * as vscode from 'vscode';
 import { registerFileOperationCommands } from '../../commands/fileOperations';
 import type { ContextManager } from '../../config/contextManager';
-import type { XCShExplorerProvider } from '../../tree/xcshExplorer';
+import type { XCSHExplorerProvider } from '../../tree/xcshExplorer';
 
 const validManifestContent = JSON.stringify({
   kind: 'http_loadbalancer',
@@ -138,7 +138,7 @@ function makeMockContextManager(): ContextManager {
 
 describe('registerFileOperationCommands', () => {
   let registeredCommands: Map<string, (...args: unknown[]) => Promise<void>>;
-  let mockExplorer: XCShExplorerProvider;
+  let mockExplorer: XCSHExplorerProvider;
   let mockContextManager: ContextManager;
 
   beforeEach(() => {
@@ -149,7 +149,7 @@ describe('registerFileOperationCommands', () => {
       return { dispose: jest.fn() };
     });
 
-    mockExplorer = { refresh: jest.fn() } as unknown as XCShExplorerProvider;
+    mockExplorer = { refresh: jest.fn() } as unknown as XCSHExplorerProvider;
     mockContextManager = makeMockContextManager();
 
     const context = {

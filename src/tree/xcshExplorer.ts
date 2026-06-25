@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
 import * as vscode from 'vscode';
-import { XCShClient } from '../api/client';
+import { XCSHClient } from '../api/client';
 import {
   BUILT_IN_NAMESPACES,
   getCategorizedResourceTypesForNamespace,
@@ -20,7 +20,7 @@ import {
   type ResourceTypeInfo,
 } from '../api/resourceTypes';
 import type { ContextManager } from '../config/contextManager';
-import type { XCShContext } from '../config/contextTypes';
+import type { XCSHContext } from '../config/contextTypes';
 import {
   getDomainComplexity,
   getDomainMetadata,
@@ -32,34 +32,34 @@ import { getLocalizedDisplayName } from '../utils/l10nHelpers';
 import { getLogger } from '../utils/logger';
 import {
   type CategoryNodeData,
-  type XCShTreeItem,
   type NamespaceNodeData,
   type ResourceNodeData,
   type ResourceTypeNodeData,
   TreeItemContext,
+  type XCSHTreeItem,
 } from './treeTypes';
 
 /**
  * Tree data provider for the F5 XC Explorer view
  */
-export class XCShExplorerProvider implements vscode.TreeDataProvider<XCShTreeItem> {
-  private readonly _onDidChangeTreeData = new vscode.EventEmitter<XCShTreeItem | undefined>();
+export class XCSHExplorerProvider implements vscode.TreeDataProvider<XCSHTreeItem> {
+  private readonly _onDidChangeTreeData = new vscode.EventEmitter<XCSHTreeItem | undefined>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   private readonly contextManager: ContextManager;
-  private readonly clientFactory: (ctx: XCShContext) => Promise<XCShClient>;
+  private readonly clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>;
   private readonly logger = getLogger();
 
-  constructor(contextManager: ContextManager, clientFactory: (ctx: XCShContext) => Promise<XCShClient>) {
+  constructor(contextManager: ContextManager, clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>) {
     this.contextManager = contextManager;
     this.clientFactory = clientFactory;
   }
 
-  getTreeItem(element: XCShTreeItem): vscode.TreeItem {
+  getTreeItem(element: XCSHTreeItem): vscode.TreeItem {
     return element.getTreeItem();
   }
 
-  async getChildren(element?: XCShTreeItem): Promise<XCShTreeItem[]> {
+  async getChildren(element?: XCSHTreeItem): Promise<XCSHTreeItem[]> {
     if (!element) {
       return this.getRootItems();
     }
@@ -95,7 +95,7 @@ export class XCShExplorerProvider implements vscode.TreeDataProvider<XCShTreeIte
     return error.message || 'An unknown error occurred';
   }
 
-  private async getRootItems(): Promise<XCShTreeItem[]> {
+  private async getRootItems(): Promise<XCSHTreeItem[]> {
     const activeContext = await this.contextManager.getActiveContext();
 
     if (!activeContext) {
@@ -117,7 +117,7 @@ export class XCShExplorerProvider implements vscode.TreeDataProvider<XCShTreeIte
       // Sort custom namespaces alphabetically
       customNamespaces.sort((a, b) => a.name.localeCompare(b.name));
 
-      const groups: XCShTreeItem[] = [];
+      const groups: XCSHTreeItem[] = [];
 
       // Add built-in namespaces group if any exist
       if (builtInNs.length > 0) {
@@ -161,12 +161,12 @@ export class XCShExplorerProvider implements vscode.TreeDataProvider<XCShTreeIte
 /**
  * Namespace group node (Built-in Namespaces, Custom Namespaces)
  */
-class NamespaceGroupNode implements XCShTreeItem {
+class NamespaceGroupNode implements XCSHTreeItem {
   constructor(
     private readonly groupName: string,
     private readonly namespaceNames: string[],
     private readonly profileName: string,
-    private readonly clientFactory: (ctx: XCShContext) => Promise<XCShClient>,
+    private readonly clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>,
     private readonly contextManager: ContextManager,
     private readonly icon: string,
     private readonly isBuiltIn: boolean,
@@ -180,7 +180,7 @@ class NamespaceGroupNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     return Promise.resolve(
       this.namespaceNames.map(
         (name) =>
@@ -197,10 +197,10 @@ class NamespaceGroupNode implements XCShTreeItem {
 /**
  * Namespace node in the tree
  */
-export class NamespaceNode implements XCShTreeItem {
+export class NamespaceNode implements XCSHTreeItem {
   constructor(
     private readonly data: NamespaceNodeData,
-    private readonly clientFactory: (ctx: XCShContext) => Promise<XCShClient>,
+    private readonly clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -213,10 +213,10 @@ export class NamespaceNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     // Get categories filtered by namespace scope
     const categories = getCategorizedResourceTypesForNamespace(this.data.name);
-    const nodes: XCShTreeItem[] = [];
+    const nodes: XCSHTreeItem[] = [];
 
     for (const [category] of categories) {
       nodes.push(
@@ -246,10 +246,10 @@ export class NamespaceNode implements XCShTreeItem {
 /**
  * Category node (Load Balancing, Security, etc.)
  */
-class CategoryNode implements XCShTreeItem {
+class CategoryNode implements XCSHTreeItem {
   constructor(
     private readonly data: CategoryNodeData,
-    private readonly clientFactory: (ctx: XCShContext) => Promise<XCShClient>,
+    private readonly clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -284,7 +284,7 @@ class CategoryNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     // Filter by category AND namespace scope
     const types = Object.entries(RESOURCE_TYPES).filter(
       ([, info]) =>
@@ -312,12 +312,12 @@ class CategoryNode implements XCShTreeItem {
 /**
  * Resource type node (HTTP Load Balancers, Origin Pools, etc.)
  */
-class ResourceTypeNode implements XCShTreeItem {
+class ResourceTypeNode implements XCSHTreeItem {
   private readonly logger = getLogger();
 
   constructor(
     private readonly data: ResourceTypeNodeData,
-    private readonly clientFactory: (ctx: XCShContext) => Promise<XCShClient>,
+    private readonly clientFactory: (ctx: XCSHContext) => Promise<XCSHClient>,
     private readonly contextManager: ContextManager,
   ) {}
 
@@ -435,7 +435,7 @@ class ResourceTypeNode implements XCShTreeItem {
     return item;
   }
 
-  async getChildren(): Promise<XCShTreeItem[]> {
+  async getChildren(): Promise<XCSHTreeItem[]> {
     try {
       const ctx = await this.contextManager.getContext(this.data.profileName);
       if (!ctx) {
@@ -443,7 +443,7 @@ class ResourceTypeNode implements XCShTreeItem {
       }
 
       const client = await this.clientFactory(ctx);
-      const listOptions = XCShClient.buildListOptions(this.data.resourceType);
+      const listOptions = XCSHClient.buildListOptions(this.data.resourceType);
       const resources = await client.listWithOptions(this.data.namespace, this.data.resourceType.apiPath, listOptions);
 
       return (
@@ -530,7 +530,7 @@ class ResourceTypeNode implements XCShTreeItem {
 /**
  * Individual resource node
  */
-export class ResourceNode implements XCShTreeItem {
+export class ResourceNode implements XCSHTreeItem {
   constructor(private readonly data: ResourceNodeData) {}
 
   getTreeItem(): vscode.TreeItem {
@@ -593,7 +593,7 @@ export class ResourceNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     return Promise.resolve([]); // Resources are leaf nodes
   }
 
@@ -625,7 +625,7 @@ export class ResourceNode implements XCShTreeItem {
 /**
  * Error node for displaying connection/API errors in the tree
  */
-class ErrorNode implements XCShTreeItem {
+class ErrorNode implements XCSHTreeItem {
   constructor(
     private readonly title: string,
     private readonly message: string,
@@ -645,7 +645,7 @@ class ErrorNode implements XCShTreeItem {
     return item;
   }
 
-  getChildren(): Promise<XCShTreeItem[]> {
+  getChildren(): Promise<XCSHTreeItem[]> {
     return Promise.resolve([]);
   }
 }

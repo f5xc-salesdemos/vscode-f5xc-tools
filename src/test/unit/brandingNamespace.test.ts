@@ -58,7 +58,9 @@ describe('Branding namespace — all user-facing identifiers use xcsh.* prefix',
     it('individual view IDs start with xcsh.', () => {
       const contributes = pkg.contributes as Record<string, unknown>;
       const views = contributes.views as Record<string, Array<{ id: string }>>;
-      const allIds = Object.values(views).flat().map((v) => v.id);
+      const allIds = Object.values(views)
+        .flat()
+        .map((v) => v.id);
       const bad = allIds.filter((id) => id.includes('f5xc'));
       expect(bad).toEqual([]);
     });

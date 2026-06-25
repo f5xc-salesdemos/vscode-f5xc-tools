@@ -13,7 +13,7 @@ const logger = getLogger();
 /**
  * Parsed F5 XC URI components
  */
-interface XCShUri {
+interface XCSHUri {
   profileName: string;
   namespace: string;
   resourceType: string;
@@ -26,7 +26,7 @@ interface XCShUri {
  *
  * URI format: xcsh://profile/namespace/resourceType/resourceName.json
  */
-export class XCShFileSystemProvider implements vscode.FileSystemProvider {
+export class XCSHFileSystemProvider implements vscode.FileSystemProvider {
   private readonly _onDidChangeFile = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
   readonly onDidChangeFile = this._onDidChangeFile.event;
 
@@ -44,7 +44,7 @@ export class XCShFileSystemProvider implements vscode.FileSystemProvider {
   /**
    * Parse an F5 XC URI into its components
    */
-  private parseUri(uri: vscode.Uri): XCShUri {
+  private parseUri(uri: vscode.Uri): XCSHUri {
     // URI format: xcsh://profile/namespace/resourceType/resourceName.json
     // The profile is in the authority, path contains namespace/resourceType/resourceName.json
     const profileName = uri.authority;

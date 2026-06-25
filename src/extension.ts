@@ -11,24 +11,23 @@ import { registerObservabilityCommands } from './commands/observability';
 import { ContextManager } from './config/contextManager';
 import { migrateProfilesToContexts } from './config/contextMigration';
 import { CloudStatusDashboardProvider } from './providers/cloudStatusDashboardProvider';
-import { XCShCodeActionProvider } from './providers/xcshCodeActionProvider';
-import { XCShCompletionProvider } from './providers/xcshCompletionProvider';
-import { registerConflictDiagnostics } from './providers/xcshConflictDiagnosticProvider';
-import { XCShDescribeProvider } from './providers/xcshDescribeProvider';
-import { XCShFileSystemProvider } from './providers/xcshFileSystemProvider';
-import { XCShHoverProvider } from './providers/xcshHoverProvider';
-
-import { XCShSchemaProvider } from './providers/xcshSchemaProvider';
-import { XCShViewProvider } from './providers/xcshViewProvider';
 import { HealthcheckFormProvider } from './providers/healthcheckFormProvider';
 import { OnboardingProvider } from './providers/onboardingProvider';
 import { SubscriptionDashboardProvider } from './providers/subscriptionDashboardProvider';
+import { XCSHCodeActionProvider } from './providers/xcshCodeActionProvider';
+import { XCSHCompletionProvider } from './providers/xcshCompletionProvider';
+import { registerConflictDiagnostics } from './providers/xcshConflictDiagnosticProvider';
+import { XCSHDescribeProvider } from './providers/xcshDescribeProvider';
+import { XCSHFileSystemProvider } from './providers/xcshFileSystemProvider';
+import { XCSHHoverProvider } from './providers/xcshHoverProvider';
+import { XCSHSchemaProvider } from './providers/xcshSchemaProvider';
+import { XCSHViewProvider } from './providers/xcshViewProvider';
 import { registerYamlSchemaContributor } from './providers/yamlSchemaContributor';
 import { getSchemaRegistry } from './schema/schemaRegistry';
 import { CloudStatusProvider } from './tree/cloudStatusProvider';
 import { ContextProvider } from './tree/contextProvider';
-import { XCShExplorerProvider } from './tree/xcshExplorer';
 import { SubscriptionProvider } from './tree/subscriptionProvider';
+import { XCSHExplorerProvider } from './tree/xcshExplorer';
 import { getLogger, type Logger } from './utils/logger';
 import { ManifestDetector } from './utils/manifestDetector';
 import { activateXcsh } from './xcsh/index';
@@ -56,7 +55,7 @@ export function activate(context: vscode.ExtensionContext): void {
   };
 
   // Initialize tree view providers
-  const explorerProvider = new XCShExplorerProvider(contextManager, clientFactory);
+  const explorerProvider = new XCSHExplorerProvider(contextManager, clientFactory);
   const contextProvider = new ContextProvider(contextManager);
   const cloudStatusProvider = new CloudStatusProvider();
   const subscriptionProvider = new SubscriptionProvider(contextManager);
@@ -70,7 +69,7 @@ export function activate(context: vscode.ExtensionContext): void {
   void updateHasActiveContext();
 
   // Initialize F5 XC file system provider for editing resources
-  const fsProvider = new XCShFileSystemProvider(contextManager, () => {
+  const fsProvider = new XCSHFileSystemProvider(contextManager, () => {
     explorerProvider.refresh();
   });
 
@@ -83,14 +82,14 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   // Initialize and register the view provider for read-only resource viewing
-  const viewProvider = new XCShViewProvider(contextManager);
+  const viewProvider = new XCSHViewProvider(contextManager);
   context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('xcsh-view', viewProvider));
 
   // Initialize the describe provider for formatted resource descriptions
-  const describeProvider = new XCShDescribeProvider(contextManager);
+  const describeProvider = new XCSHDescribeProvider(contextManager);
 
   // Initialize and register the schema provider for JSON IntelliSense
-  const schemaProvider = new XCShSchemaProvider();
+  const schemaProvider = new XCSHSchemaProvider();
   context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('xcsh-schema', schemaProvider));
   logger.debug('Schema provider registered');
 
@@ -111,7 +110,7 @@ export function activate(context: vscode.ExtensionContext): void {
     ];
 
     // Register multi-line completion provider (dropdown completions)
-    const completionProvider = new XCShCompletionProvider();
+    const completionProvider = new XCSHCompletionProvider();
     context.subscriptions.push(
       vscode.languages.registerCompletionItemProvider(
         xcshDocumentSelector,
@@ -123,13 +122,13 @@ export function activate(context: vscode.ExtensionContext): void {
     );
 
     // Register hover provider (field documentation on hover)
-    const hoverProvider = new XCShHoverProvider();
+    const hoverProvider = new XCSHHoverProvider();
     context.subscriptions.push(vscode.languages.registerHoverProvider(xcshDocumentSelector, hoverProvider));
 
     // Register code action provider (quick fixes for conflicts)
     context.subscriptions.push(
-      vscode.languages.registerCodeActionsProvider(xcshDocumentSelector, new XCShCodeActionProvider(), {
-        providedCodeActionKinds: XCShCodeActionProvider.providedCodeActionKinds,
+      vscode.languages.registerCodeActionsProvider(xcshDocumentSelector, new XCSHCodeActionProvider(), {
+        providedCodeActionKinds: XCSHCodeActionProvider.providedCodeActionKinds,
       }),
     );
 

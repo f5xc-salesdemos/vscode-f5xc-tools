@@ -55,10 +55,7 @@ export async function migrateSettings(context: vscode.ExtensionContext): Promise
   if (count > 0) {
     logger.info(`settingsMigration: migrated ${count} settings from ${OLD_SECTION}.* to ${NEW_SECTION}.*`);
     void vscode.window.showInformationMessage(
-      vscode.l10n.t(
-        'xcsh: {0} settings migrated from f5xc.* to xcsh.* namespace. No action needed.',
-        count,
-      ),
+      vscode.l10n.t('xcsh: {0} settings migrated from f5xc.* to xcsh.* namespace. No action needed.', count),
     );
   }
 }

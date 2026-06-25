@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-import { XCShHoverProvider } from '../../providers/xcshHoverProvider';
+import { XCSHHoverProvider } from '../../providers/xcshHoverProvider';
 
 function createMockDocument(content: string, filename = 'test.http_loadbalancer.json') {
   const lines = content.split('\n');
@@ -31,8 +31,8 @@ function createPosition(line: number, character: number) {
   return { line, character } as import('vscode').Position;
 }
 
-describe('XCShHoverProvider', () => {
-  const provider = new XCShHoverProvider();
+describe('XCSHHoverProvider', () => {
+  const provider = new XCSHHoverProvider();
 
   it('returns hover for known spec-level field with description', () => {
     const content = `{

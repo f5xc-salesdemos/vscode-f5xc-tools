@@ -7,14 +7,14 @@ import { getLogger } from './logger';
 /**
  * Custom error class for F5 XC API errors
  */
-export class XCShApiError extends Error {
+export class XCSHApiError extends Error {
   public readonly statusCode: number;
   public readonly body: string;
   public readonly resourcePath?: string;
 
   constructor(statusCode: number, body: string, resourcePath?: string) {
     super(`API Error ${statusCode}: ${body}`);
-    this.name = 'XCShApiError';
+    this.name = 'XCSHApiError';
     this.statusCode = statusCode;
     this.body = body;
     this.resourcePath = resourcePath;
@@ -133,7 +133,7 @@ export async function withErrorHandling<T>(
   } catch (error) {
     logger.error(`${context} failed`, error as Error);
 
-    if (error instanceof XCShApiError) {
+    if (error instanceof XCSHApiError) {
       // Try to get a smart error message if we have resource context
       let smartMessage: string | undefined;
       if (options?.resourceTypeKey && options?.operation) {

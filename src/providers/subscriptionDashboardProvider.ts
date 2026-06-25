@@ -17,9 +17,9 @@ import {
   type QuotaUsage,
 } from '../api/subscription';
 import type { ContextManager } from '../config/contextManager';
-import { getToolbarIconSvg } from '../utils/xcshIcons';
 import { getLogger } from '../utils/logger';
 import { escapeHtml, getNonce, getWebviewBaseStyles } from '../utils/panelBaseStyles';
+import { getToolbarIconSvg } from '../utils/xcshIcons';
 
 const logger = getLogger();
 

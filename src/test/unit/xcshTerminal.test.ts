@@ -1,11 +1,11 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-import type { XCShContext } from '../../config/contextTypes';
+import type { XCSHContext } from '../../config/contextTypes';
 import { buildTerminalEnv } from '../../xcsh/terminalIntegration';
 
 describe('buildTerminalEnv', () => {
   it('builds env vars correctly from context', () => {
-    const ctx: XCShContext = {
+    const ctx: XCSHContext = {
       name: 'staging',
       apiUrl: 'https://acme.console.ves.volterra.io/api',
       apiToken: 'tok-abc-123',
@@ -22,7 +22,7 @@ describe('buildTerminalEnv', () => {
   });
 
   it('handles dotless hostname (tenant undefined)', () => {
-    const ctx: XCShContext = {
+    const ctx: XCSHContext = {
       name: 'local',
       apiUrl: 'https://localhost/api',
       apiToken: 'tok-local',
@@ -37,7 +37,7 @@ describe('buildTerminalEnv', () => {
   });
 
   it('includes all expected keys for valid context', () => {
-    const ctx: XCShContext = {
+    const ctx: XCSHContext = {
       name: 'prod',
       apiUrl: 'https://tenant1.console.ves.volterra.io/api',
       apiToken: 'tok-prod',

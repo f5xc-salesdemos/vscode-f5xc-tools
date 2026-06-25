@@ -79,7 +79,7 @@ const mockResourceService = {
 
 import { registerExportCommands } from '../../commands/exportResource';
 import type { ContextManager } from '../../config/contextManager';
-import type { XCShExplorerProvider } from '../../tree/xcshExplorer';
+import type { XCSHExplorerProvider } from '../../tree/xcshExplorer';
 
 describe('registerExportCommands', () => {
   let registeredCommands: Map<string, (...args: unknown[]) => Promise<void>>;
@@ -96,7 +96,7 @@ describe('registerExportCommands', () => {
       subscriptions: { push: jest.fn() },
     } as unknown as import('vscode').ExtensionContext;
 
-    const explorer = {} as XCShExplorerProvider;
+    const explorer = {} as XCSHExplorerProvider;
     const contextManager = {} as ContextManager;
 
     registerExportCommands(context, explorer, contextManager);

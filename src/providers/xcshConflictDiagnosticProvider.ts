@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
 import * as vscode from 'vscode';
-import { getSchemaForDocument, isXCShJsonFile } from '../utils/completionHelper';
+import { getSchemaForDocument, isXCSHJsonFile } from '../utils/completionHelper';
 
 export interface ConflictEntry {
   field: string;
@@ -36,7 +36,7 @@ export function registerConflictDiagnostics(context: vscode.ExtensionContext): v
   context.subscriptions.push(diagnosticCollection);
 
   const checkDocument = (document: vscode.TextDocument) => {
-    if (!isXCShJsonFile(document)) {
+    if (!isXCSHJsonFile(document)) {
       return;
     }
 

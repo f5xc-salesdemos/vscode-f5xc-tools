@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
-import { XCShInlineCompletionProvider } from '../../providers/xcshInlineCompletionProvider';
+import { XCSHInlineCompletionProvider } from '../../providers/xcshInlineCompletionProvider';
 import { clearDetectionCache } from '../../utils/completionHelper';
 
 function createMockDocument(content: string, filename = 'test.http_loadbalancer.json') {
@@ -34,8 +34,8 @@ const mockToken = {
   onCancellationRequested: jest.fn(),
 } as unknown as import('vscode').CancellationToken;
 
-describe('XCShInlineCompletionProvider', () => {
-  const provider = new XCShInlineCompletionProvider();
+describe('XCSHInlineCompletionProvider', () => {
+  const provider = new XCSHInlineCompletionProvider();
 
   beforeEach(() => {
     clearDetectionCache();

@@ -9,7 +9,7 @@
  *   3. Global config dir      (~/.config/xcsh/contexts/)
  *
  * A local context file may be:
- *   - **inline** — a full XCShContext JSON (`{ apiUrl, … }`)
+ *   - **inline** — a full XCSHContext JSON (`{ apiUrl, … }`)
  *   - **pointer** — `{ context: "<globalName>", overrides?: … }` that
  *     references a global context and optionally merges overrides.
  *
@@ -27,7 +27,7 @@ import {
   getLocalContextPath,
   getLocalContextsDir,
 } from './contextPaths';
-import { type XCShContext, isValidContextName } from './contextTypes';
+import { isValidContextName, type XCSHContext } from './contextTypes';
 
 // ───────── public types ─────────
 
@@ -48,7 +48,7 @@ export interface PointerContext {
 export type ContextSource = 'env' | 'local' | 'global';
 
 export interface ResolvedContext {
-  context: XCShContext;
+  context: XCSHContext;
   source: ContextSource;
   sourcePath: string;
 }
@@ -73,7 +73,7 @@ export function isInlineContext(data: unknown): boolean {
 
 // ───────── merge ─────────
 
-export function mergePointerOverrides(base: XCShContext, overrides: ContextOverrides): XCShContext {
+export function mergePointerOverrides(base: XCSHContext, overrides: ContextOverrides): XCSHContext {
   const merged = { ...base };
 
   if (overrides.defaultNamespace !== undefined) {
@@ -83,7 +83,7 @@ export function mergePointerOverrides(base: XCShContext, overrides: ContextOverr
     merged.sensitiveKeys = overrides.sensitiveKeys;
   }
   if (overrides.knowledgeSources !== undefined) {
-    merged.knowledgeSources = overrides.knowledgeSources as XCShContext['knowledgeSources'];
+    merged.knowledgeSources = overrides.knowledgeSources as XCSHContext['knowledgeSources'];
   }
   if (overrides.includeSkills !== undefined) {
     merged.includeSkills = overrides.includeSkills;
@@ -150,7 +150,7 @@ function resolveFromLocal(workspaceFolder: string): ResolvedContext | null {
 
   if (isInlineContext(data)) {
     return {
-      context: data as unknown as XCShContext,
+      context: data as unknown as XCSHContext,
       source: 'local',
       sourcePath: contextPath,
     };
@@ -183,7 +183,7 @@ function resolveFromGlobal(): ResolvedContext | null {
 
   if (isInlineContext(data)) {
     return {
-      context: data as unknown as XCShContext,
+      context: data as unknown as XCSHContext,
       source: 'global',
       sourcePath: contextPath,
     };
@@ -202,7 +202,7 @@ function resolvePointer(pointer: PointerContext, pointerPath: string): ResolvedC
     return null;
   }
 
-  let resolved = globalData as unknown as XCShContext;
+  let resolved = globalData as unknown as XCSHContext;
   if (pointer.overrides) {
     resolved = mergePointerOverrides(resolved, pointer.overrides);
   }

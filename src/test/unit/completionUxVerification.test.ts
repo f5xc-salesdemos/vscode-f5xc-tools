@@ -8,7 +8,7 @@
 
 import { CompletionList } from 'vscode';
 import { getServerDefaultFields } from '../../api/resourceTypes';
-import { XCShCompletionProvider } from '../../providers/xcshCompletionProvider';
+import { XCSHCompletionProvider } from '../../providers/xcshCompletionProvider';
 import { getSchemaRegistry } from '../../schema/schemaRegistry';
 import { clearDetectionCache } from '../../utils/completionHelper';
 
@@ -58,7 +58,7 @@ function getCompletionLabels(result: unknown): string[] {
 }
 
 describe('Intellisense UX Verification', () => {
-  const provider = new XCShCompletionProvider();
+  const provider = new XCSHCompletionProvider();
 
   beforeEach(() => {
     clearDetectionCache();

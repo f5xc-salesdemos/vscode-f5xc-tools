@@ -21,7 +21,7 @@ const logger = getLogger();
  *   - xcsh-schema://schemas/origin_pool.json
  *   - xcsh-schema://schemas/generic.json
  */
-export class XCShSchemaProvider implements vscode.TextDocumentContentProvider {
+export class XCSHSchemaProvider implements vscode.TextDocumentContentProvider {
   private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
   readonly onDidChange = this._onDidChange.event;
 

@@ -5,12 +5,12 @@ import type { Resource } from '../api/client';
 import { getFieldConstraints, getMinimumConfigFields } from '../api/resourceTypes';
 import { getQuotaForResourceType, type QuotaItem } from '../api/subscription';
 import type { ContextManager } from '../config/contextManager';
-import type { XCShExplorerProvider } from '../tree/xcshExplorer';
+import type { XCSHExplorerProvider } from '../tree/xcshExplorer';
 import { showError, showInfo } from '../utils/errors';
-import { getToolbarIconSvg } from '../utils/xcshIcons';
 import { getLogger } from '../utils/logger';
 import { escapeHtml, getNonce, getWebviewBaseStyles } from '../utils/panelBaseStyles';
-import type { XCShDescribeProvider } from './xcshDescribeProvider';
+import { getToolbarIconSvg } from '../utils/xcshIcons';
+import type { XCSHDescribeProvider } from './xcshDescribeProvider';
 
 const logger = getLogger();
 
@@ -72,8 +72,8 @@ export class HealthcheckFormProvider {
 
   constructor(
     private readonly contextManager: ContextManager,
-    private readonly explorer: XCShExplorerProvider,
-    private readonly describeProvider: XCShDescribeProvider,
+    private readonly explorer: XCSHExplorerProvider,
+    private readonly describeProvider: XCSHDescribeProvider,
   ) {}
 
   /**

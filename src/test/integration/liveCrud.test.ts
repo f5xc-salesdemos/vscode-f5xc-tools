@@ -4,7 +4,7 @@
  * Live CRUD integration tests for F5 Distributed Cloud.
  *
  * These tests exercise the full create/read/update/delete lifecycle
- * against the real F5 XC API using XCShClient directly.
+ * against the real F5 XC API using XCSHClient directly.
  *
  * Required env vars:
  *   XCSH_API_URL  — e.g. https://tenant.console.ves.volterra.io
@@ -15,8 +15,8 @@
  */
 
 import { TokenAuthProvider } from '../../api/auth/tokenAuth';
-import { XCShClient, type Resource } from '../../api/client';
-import { XCShApiError } from '../../utils/errors';
+import { type Resource, XCSHClient } from '../../api/client';
+import { XCSHApiError } from '../../utils/errors';
 
 const API_URL = process.env.XCSH_API_URL ?? '';
 const API_TOKEN = process.env.XCSH_API_TOKEN ?? '';
@@ -26,11 +26,11 @@ const PREFIX = `test-sp3-${Date.now()}`;
 // Track created resources for cleanup
 const createdResources: Array<{ apiPath: string; name: string }> = [];
 
-let client: XCShClient;
+let client: XCSHClient;
 
 beforeAll(() => {
   const auth = new TokenAuthProvider({ apiUrl: API_URL, apiToken: API_TOKEN });
-  client = new XCShClient(API_URL, auth);
+  client = new XCSHClient(API_URL, auth);
 });
 
 afterAll(async () => {
@@ -119,14 +119,14 @@ describe('Healthcheck CRUD lifecycle', () => {
     }
   }, 30000);
 
-  it('get deleted healthcheck — expect XCShApiError with isNotFound', async () => {
+  it('get deleted healthcheck — expect XCSHApiError with isNotFound', async () => {
     try {
       await client.get(NAMESPACE, apiPath, hcName);
       // Should not reach here
-      fail('Expected XCShApiError to be thrown');
+      fail('Expected XCSHApiError to be thrown');
     } catch (error) {
-      expect(error).toBeInstanceOf(XCShApiError);
-      expect((error as XCShApiError).isNotFound).toBe(true);
+      expect(error).toBeInstanceOf(XCSHApiError);
+      expect((error as XCSHApiError).isNotFound).toBe(true);
     }
   }, 30000);
 });
@@ -182,13 +182,13 @@ describe('Origin pool CRUD lifecycle', () => {
 // Error handling
 // ---------------------------------------------------------------------------
 describe('Error handling', () => {
-  it('get nonexistent resource — XCShApiError with isNotFound', async () => {
+  it('get nonexistent resource — XCSHApiError with isNotFound', async () => {
     try {
       await client.get(NAMESPACE, 'healthchecks', `${PREFIX}-does-not-exist`);
-      fail('Expected XCShApiError to be thrown');
+      fail('Expected XCSHApiError to be thrown');
     } catch (error) {
-      expect(error).toBeInstanceOf(XCShApiError);
-      expect((error as XCShApiError).isNotFound).toBe(true);
+      expect(error).toBeInstanceOf(XCSHApiError);
+      expect((error as XCSHApiError).isNotFound).toBe(true);
     }
   }, 30000);
 
@@ -216,10 +216,10 @@ describe('Error handling', () => {
     // Attempt to create a duplicate
     try {
       await client.create(NAMESPACE, apiPath, body);
-      fail('Expected XCShApiError to be thrown for duplicate creation');
+      fail('Expected XCSHApiError to be thrown for duplicate creation');
     } catch (error) {
-      expect(error).toBeInstanceOf(XCShApiError);
-      const apiError = error as XCShApiError;
+      expect(error).toBeInstanceOf(XCSHApiError);
+      const apiError = error as XCSHApiError;
       expect(apiError.statusCode).toBeGreaterThanOrEqual(400);
       expect(apiError.statusCode).toBeLessThan(500);
     }

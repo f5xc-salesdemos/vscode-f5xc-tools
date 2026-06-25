@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import type { ContextManager } from '../config/contextManager';
 import { ResourceService } from '../services/resourceService';
-import type { XCShExplorerProvider, ResourceNode } from '../tree/xcshExplorer';
 import type { ResourceTypeNodeData } from '../tree/treeTypes';
+import type { ResourceNode, XCSHExplorerProvider } from '../tree/xcshExplorer';
 import { showWarning, withErrorHandling } from '../utils/errors';
 import { getLocalizedDisplayName } from '../utils/l10nHelpers';
 import { getLogger } from '../utils/logger';
@@ -157,7 +157,7 @@ async function exportAllResources(
 
 export function registerExportCommands(
   context: vscode.ExtensionContext,
-  _explorer: XCShExplorerProvider,
+  _explorer: XCSHExplorerProvider,
   contextManager: ContextManager,
 ): void {
   const resourceService = new ResourceService(contextManager);

@@ -22,7 +22,7 @@ describe('contextResolver', () => {
     globalConfigDir = path.join(tmpDir, 'global-config');
 
     fs.mkdirSync(path.join(projectDir, '.xcsh', 'contexts'), { recursive: true, mode: 0o700 });
-    fs.mkdirSync(path.join(globalConfigDir, 'xcsh','contexts'), { recursive: true, mode: 0o700 });
+    fs.mkdirSync(path.join(globalConfigDir, 'xcsh', 'contexts'), { recursive: true, mode: 0o700 });
 
     process.env.XDG_CONFIG_HOME = globalConfigDir;
     delete process.env.XCSH_API_URL;
@@ -67,7 +67,7 @@ describe('contextResolver', () => {
       defaultNamespace: 'system',
       env: { G: 'val' },
     };
-    fs.writeFileSync(path.join(globalConfigDir, 'xcsh','contexts', 'prod-tenant.json'), JSON.stringify(globalCtx), {
+    fs.writeFileSync(path.join(globalConfigDir, 'xcsh', 'contexts', 'prod-tenant.json'), JSON.stringify(globalCtx), {
       mode: 0o600,
     });
 
@@ -110,10 +110,10 @@ describe('contextResolver', () => {
       apiToken: 'gtok',
       defaultNamespace: 'default',
     };
-    fs.writeFileSync(path.join(globalConfigDir, 'xcsh','contexts', 'global-ctx.json'), JSON.stringify(globalCtx), {
+    fs.writeFileSync(path.join(globalConfigDir, 'xcsh', 'contexts', 'global-ctx.json'), JSON.stringify(globalCtx), {
       mode: 0o600,
     });
-    fs.writeFileSync(path.join(globalConfigDir, 'xcsh','active_context'), 'global-ctx', { mode: 0o600 });
+    fs.writeFileSync(path.join(globalConfigDir, 'xcsh', 'active_context'), 'global-ctx', { mode: 0o600 });
 
     const result = await resolveContext(projectDir);
     expect(result).not.toBeNull();

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import type { ContextManager } from '../config/contextManager';
 import { ResourceService } from '../services/resourceService';
-import type { XCShExplorerProvider } from '../tree/xcshExplorer';
+import type { XCSHExplorerProvider } from '../tree/xcshExplorer';
 import { showWarning, withErrorHandling } from '../utils/errors';
 import { getLogger } from '../utils/logger';
 import { getManifestKind, isXCManifest } from '../utils/manifestDetector';
@@ -94,7 +94,7 @@ async function getActiveContextName(contextManager: ContextManager): Promise<str
 
 export function registerFileOperationCommands(
   context: vscode.ExtensionContext,
-  explorer: XCShExplorerProvider,
+  explorer: XCSHExplorerProvider,
   contextManager: ContextManager,
 ): void {
   const resourceService = new ResourceService(contextManager);

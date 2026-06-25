@@ -1,9 +1,9 @@
 // Copyright (c) 2026 Robin Mordasiewicz. MIT License.
 
 import type * as vscode from 'vscode';
-import type { XCShClient } from '../api/client';
+import type { XCSHClient } from '../api/client';
 
-export interface XCShContext {
+export interface XCSHContext {
   name: string;
   apiUrl: string;
   apiToken: string;
@@ -34,9 +34,9 @@ export type TokenHealth = 'ok' | 'expiring' | 'expired';
 export type AuthStatus = 'connected' | 'auth_error' | 'offline' | 'unknown';
 
 export interface ContextManagerInterface {
-  getActiveContext(): Promise<XCShContext | null>;
-  getContexts(): Promise<XCShContext[]>;
-  getClient(contextName: string): Promise<XCShClient>;
+  getActiveContext(): Promise<XCSHContext | null>;
+  getContexts(): Promise<XCSHContext[]>;
+  getClient(contextName: string): Promise<XCSHClient>;
   onDidChangeContext: vscode.Event<void>;
 }
 

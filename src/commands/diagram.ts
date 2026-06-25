@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import type { ContextManager } from '../config/contextManager';
-import { XCShDiagramProvider } from '../providers/xcshDiagramProvider';
+import { XCSHDiagramProvider } from '../providers/xcshDiagramProvider';
 import type { ResourceNode } from '../tree/xcshExplorer';
 import { showWarning, withErrorHandling } from '../utils/errors';
 import { getLogger } from '../utils/logger';
@@ -14,7 +14,7 @@ const logger = getLogger();
  */
 export function registerDiagramCommands(context: vscode.ExtensionContext, contextManager: ContextManager): void {
   // Create diagram provider instance
-  const diagramProvider = new XCShDiagramProvider(contextManager);
+  const diagramProvider = new XCSHDiagramProvider(contextManager);
 
   // Register dispose handler
   context.subscriptions.push({
