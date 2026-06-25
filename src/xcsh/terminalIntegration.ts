@@ -32,14 +32,14 @@ async function showXcshNotFoundPrompt(): Promise<void> {
 export function buildTerminalEnv(ctx: F5XCContext): Record<string, string | undefined> {
   const tenant = deriveTenantFromUrl(ctx.apiUrl);
   const env: Record<string, string | undefined> = {
-    F5XC_API_URL: ctx.apiUrl,
-    F5XC_API_TOKEN: ctx.apiToken,
-    F5XC_NAMESPACE: ctx.defaultNamespace,
-    F5XC_CONTEXT_NAME: ctx.name,
+    XCSH_API_URL: ctx.apiUrl,
+    XCSH_API_TOKEN: ctx.apiToken,
+    XCSH_NAMESPACE: ctx.defaultNamespace,
+    XCSH_CONTEXT_NAME: ctx.name,
   };
 
   if (tenant) {
-    env.F5XC_TENANT = tenant;
+    env.XCSH_TENANT = tenant;
   }
 
   return env;
