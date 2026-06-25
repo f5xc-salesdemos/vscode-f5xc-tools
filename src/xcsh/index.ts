@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { checkGitTracking, resolveContext } from '../config/contextResolver';
 import type { ContextManagerInterface } from '../config/contextTypes';
-import { CURRENT_SCHEMA_VERSION, deriveTenantFromUrl } from '../config/contextTypes';
+import { CURRENT_SCHEMA_VERSION, deriveTenantFromUrl, RESERVED_ENV_KEYS } from '../config/contextTypes';
 import { getLogger } from '../utils/logger';
 import { registerChatParticipant } from './chatParticipant';
 import { HOST_TOOL_DEFINITIONS, handleHostToolCall } from './hostTools';
@@ -109,6 +109,17 @@ export async function activateXcsh(
     };
     if (tenant) {
       env.XCSH_TENANT = tenant;
+    }
+    // Inject the context's generic env map (auth credentials like XCSH_USERNAME /
+    // XCSH_CONSOLE_PASSWORD, plus any user-defined vars). Reserved control keys are
+    // skipped so a custom env can never shadow the core variables set above.
+    // Mirrors the shell's #applyToSettings.
+    if (ctx.env) {
+      for (const [key, value] of Object.entries(ctx.env)) {
+        if (!RESERVED_ENV_KEYS.has(key)) {
+          env[key] = value;
+        }
+      }
     }
     processManager.setEnvVars(env);
 

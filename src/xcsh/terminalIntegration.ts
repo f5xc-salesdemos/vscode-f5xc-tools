@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import type { ContextManagerInterface, XCSHContext } from '../config/contextTypes';
-import { deriveTenantFromUrl } from '../config/contextTypes';
+import { deriveTenantFromUrl, RESERVED_ENV_KEYS } from '../config/contextTypes';
 import { getLogger } from '../utils/logger';
 import { findXcshBinary } from './processManager';
 
@@ -40,6 +40,16 @@ export function buildTerminalEnv(ctx: XCSHContext): Record<string, string | unde
 
   if (tenant) {
     env.XCSH_TENANT = tenant;
+  }
+
+  // Inject the context's generic env map (auth credentials + user-defined vars),
+  // skipping reserved control keys so they can't shadow the core vars above.
+  if (ctx.env) {
+    for (const [key, value] of Object.entries(ctx.env)) {
+      if (!RESERVED_ENV_KEYS.has(key)) {
+        env[key] = value;
+      }
+    }
   }
 
   return env;

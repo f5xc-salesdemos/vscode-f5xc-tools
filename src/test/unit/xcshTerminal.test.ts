@@ -50,4 +50,41 @@ describe('buildTerminalEnv', () => {
       expect.arrayContaining(['XCSH_API_URL', 'XCSH_API_TOKEN', 'XCSH_NAMESPACE', 'XCSH_TENANT', 'XCSH_CONTEXT_NAME']),
     );
   });
+
+  it('injects generic env vars including web-console auth credentials', () => {
+    const ctx: XCSHContext = {
+      name: 'auth',
+      apiUrl: 'https://acme.console.ves.volterra.io/api',
+      apiToken: 'tok',
+      defaultNamespace: 'system',
+      env: {
+        XCSH_USERNAME: 'console-user@example.com',
+        XCSH_CONSOLE_PASSWORD: 's3cret',
+        XCSH_EMAIL: 'user@example.com',
+      },
+    };
+
+    const env = buildTerminalEnv(ctx);
+
+    expect(env.XCSH_USERNAME).toBe('console-user@example.com');
+    expect(env.XCSH_CONSOLE_PASSWORD).toBe('s3cret');
+    expect(env.XCSH_EMAIL).toBe('user@example.com');
+  });
+
+  it('never lets a context env shadow reserved control vars', () => {
+    const ctx: XCSHContext = {
+      name: 'shadow',
+      apiUrl: 'https://acme.console.ves.volterra.io/api',
+      apiToken: 'real-token',
+      defaultNamespace: 'system',
+      // These reserved keys must be ignored; the core fields win.
+      env: { XCSH_API_TOKEN: 'EVIL', XCSH_TENANT: 'evil', XCSH_NAMESPACE: 'evil' },
+    };
+
+    const env = buildTerminalEnv(ctx);
+
+    expect(env.XCSH_API_TOKEN).toBe('real-token');
+    expect(env.XCSH_TENANT).toBe('acme');
+    expect(env.XCSH_NAMESPACE).toBe('system');
+  });
 });
