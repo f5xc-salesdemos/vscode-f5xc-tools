@@ -1102,6 +1102,6 @@
     "typescript-eslint": "^8.61.1",
     "vite": "^8.1.0",
     "webpack": "^5.108.1",
-    "webpack-cli": "^7.0.3"
+    "webpack-cli": "^7.1.0"
   }
 }
